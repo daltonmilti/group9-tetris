@@ -1,26 +1,51 @@
 package edu.uw.tcss.app;
 
+import java.util.logging.Logger;
 import model.Board;
 
-public class SandBox {
+/**
+ * Class to execute new Board Game
+ * and print out board state every update.
+ *
+ * @author Charles Bryan (cfb3@uw.edu)
+ * @author Alan Fowler (acfowler@uw.edu)
+ * @version Autumn 2023
+ */
+public final class SandBox {
 
+    /**
+     * Initilization of Logger object used for output.
+     */
+    private static final Logger LOGGER = Logger.getLogger(SandBox.class.getName());
+
+
+    private SandBox() {
+        super();
+    }
+
+    /**
+     * Where execution begins.
+     * @param theArgs Used for command line input.
+     */
     public static void main(final String[] theArgs) {
+
         final Board b = new Board();
+
         b.newGame();
-        System.out.println(b);
+        LOGGER.info(b.toString());
 
         b.step();
-        System.out.println(b);
+        LOGGER.info(b.toString());
         b.rotateCW();
-        System.out.println(b);
+        LOGGER.info(b.toString());
         b.rotateCW();
-        System.out.println(b);
+        LOGGER.info(b.toString());
         b.rotateCW();
-        System.out.println(b);
-        b.rotateCW();
-        System.out.println(b);
+        LOGGER.info(b.toString());
+        b.step();
+        LOGGER.info(b.toString());
         b.drop();
-        System.out.println(b);
+        LOGGER.info(b.toString());
 
     }
 
