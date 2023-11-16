@@ -16,7 +16,7 @@ import java.util.Random;
  * @version 1.3
  */
 @SuppressWarnings("CheckStyle")
-public enum TetrisPiece {
+public enum TetrisPiece implements TeterisPieceInterface {
 
     /** The 'I' TetrisPiece. */
     I(4, 1,
@@ -149,6 +149,7 @@ public enum TetrisPiece {
      * 
      * @return the width of the TetrisPiece.
      */
+    @Override
     public int getWidth() {
         return myWidth;
     }
@@ -158,6 +159,7 @@ public enum TetrisPiece {
      * 
      * @return the height of the TetrisPiece.
      */
+    @Override
     public int getHeight() {
         return myHeight;
     }
@@ -167,6 +169,7 @@ public enum TetrisPiece {
      * 
      * @return The Block type of the TetrisPiece.
      */
+    @Override
     public Block getBlock() {
         return myBlock;
     }
@@ -176,6 +179,7 @@ public enum TetrisPiece {
      * 
      * @return the Points of the TetrisPiece.
      */
+    @Override
     public Point[] getPoints() {
         return myPoints.clone();
     }
@@ -185,6 +189,7 @@ public enum TetrisPiece {
      * @param theRotation return the points for this Piece based on this rotation
      * @return the Points of the TetrisPiece.
      */    
+    @Override
     public int[][] getPointsByRotation(final Rotation theRotation) {
         return myPointsByRotation[theRotation.ordinal()].clone();
     }
