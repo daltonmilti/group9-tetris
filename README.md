@@ -1,16 +1,9 @@
 # TCSS305-Group-Project
 
-TCSS 305 Tetris
+TCSS 305 Tetris | Group 9 | Autumn 2023
 
-Autumn 2023
-
-This is the starter code template for TCSS 305 assignments.
-
-Included:
-
-- Checkstyle rule structure
-- IntelliJ Clean-code rules
-- Package structure
-- Driver class with LOGGER object and examples
-- Unit test folder
-- .gitignore and README.md
+Members:
+- Christina Situ
+- Brandon Ragghianti
+- Khobaib Zafar
+- Dalton Miltimore
