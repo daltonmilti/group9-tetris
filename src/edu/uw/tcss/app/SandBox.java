@@ -47,7 +47,6 @@ public final class SandBox {
         b.drop();
         LOGGER.info(b.toString());
 
-
     }
 
 }
