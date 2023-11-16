@@ -14,7 +14,8 @@ import java.util.Random;
  * @author Alan Fowler
  * @version 1.2
  */
-public enum Rotation implements  RotationInterface {
+@SuppressWarnings("PublicMethodNotExposedInInterface")
+public enum Rotation {
 
     /**
      * No rotation.
@@ -46,7 +47,6 @@ public enum Rotation implements  RotationInterface {
      * 
      * @return new Rotation object that is rotated 90 degrees clockwise.
      */
-    @Override
     public Rotation clockwise() {
         return values()[(this.ordinal() + 1) % values().length];
     }
@@ -56,7 +56,6 @@ public enum Rotation implements  RotationInterface {
      * 
      * @return new Rotation object that is rotated 90 degrees clockwise.
      */
-    @Override
     public Rotation counterClockwise() {
         return values()[(this.ordinal() - 1 + values().length) % values().length];
     }
