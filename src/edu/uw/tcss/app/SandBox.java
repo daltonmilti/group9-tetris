@@ -33,7 +33,7 @@ public final class SandBox {
 
         b.newGame();
         LOGGER.info(b.toString());
-
+        b.step();
         b.step();
         LOGGER.info(b.toString());
         b.rotateCW();
