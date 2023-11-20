@@ -15,7 +15,7 @@ import java.util.Random;
  * @author Alan Fowler
  * @version 1.3
  */
-@SuppressWarnings("CheckStyle")
+@SuppressWarnings({"CheckStyle", "PublicMethodNotExposedInInterface"})
 public enum TetrisPiece {
 
     /** The 'I' TetrisPiece. */
@@ -184,7 +184,7 @@ public enum TetrisPiece {
      * 
      * @param theRotation return the points for this Piece based on this rotation
      * @return the Points of the TetrisPiece.
-     */    
+     */
     public int[][] getPointsByRotation(final Rotation theRotation) {
         return myPointsByRotation[theRotation.ordinal()].clone();
     }
