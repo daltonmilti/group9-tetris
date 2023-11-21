@@ -33,7 +33,7 @@ public class TetrisGUI extends JPanel {
     }
 
     public void buildComponents() {
-        myGamePanel = new JPanel();
+        myGamePanel = new GamePanel();
         myNextPiecePanel = new JPanel();
         myInfoPanel = new JPanel();
 
