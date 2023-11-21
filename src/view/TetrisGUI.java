@@ -15,6 +15,8 @@ public class TetrisGUI {
 
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        window.setSize(frameSize);
+
         //window.setContentPane(mainPanel);
 
         window.pack();
