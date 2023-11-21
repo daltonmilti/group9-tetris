@@ -5,9 +5,17 @@ import java.awt.*;
 
 public class TetrisGUI extends JPanel {
 
+    private JPanel myGamePanel;
+
+    private JPanel myNextPiecePanel;
+
+    private JPanel myInfoPanel;
+
+
     public TetrisGUI() {
         super();
         buildComponents();
+        layoutComponents();
     }
 
     public static void CreateAndShowGUI() {
@@ -24,10 +32,19 @@ public class TetrisGUI extends JPanel {
         window.setVisible(true);
     }
 
-    public static void buildComponents() {
-        GamePanel gamePanel = new GamePanel();
-        NextPiecePanel nextPiecePanel = new NextPiecePanel();
-        InfoPanel infoPanel = new InfoPanel();
+    public void buildComponents() {
+        myGamePanel = new JPanel();
+        myNextPiecePanel = new JPanel();
+        myInfoPanel = new JPanel();
+
+    }
+
+    private void layoutComponents() {
+
+        final JPanel mainPanel = new JPanel();
+        mainPanel.add(myGamePanel);
+        mainPanel.add(myNextPiecePanel);
+        mainPanel.add(myInfoPanel);
     }
 }
 
