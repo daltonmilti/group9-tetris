@@ -10,7 +10,6 @@ public class TetrisGUI {
         frame.setVisible(true);
 
 
-
     }
 }
 
