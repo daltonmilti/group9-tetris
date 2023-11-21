@@ -3,7 +3,7 @@ package view;
 import javax.swing.*;
 import java.awt.*;
 
-public class TetrisGUI {
+public class TetrisGUI extends JPanel {
 
     public static void CreateAndShowGUI() {
         final TetrisGUI mainPanel =
@@ -17,7 +17,7 @@ public class TetrisGUI {
 
         window.setSize(frameSize);
 
-        //window.setContentPane(mainPanel);
+        window.setContentPane(mainPanel);
 
         window.pack();
 
