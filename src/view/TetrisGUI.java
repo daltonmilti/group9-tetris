@@ -5,6 +5,11 @@ import java.awt.*;
 
 public class TetrisGUI extends JPanel {
 
+    public TetrisGUI() {
+        super();
+        buildComponents();
+    }
+
     public static void CreateAndShowGUI() {
         final TetrisGUI mainPanel =
                 new TetrisGUI();
@@ -17,6 +22,12 @@ public class TetrisGUI extends JPanel {
         window.setContentPane(mainPanel);
         window.pack();
         window.setVisible(true);
+    }
+
+    public static void buildComponents() {
+        GamePanel gamePanel = new GamePanel();
+        NextPiecePanel nextPiecePanel = new NextPiecePanel();
+        InfoPanel infoPanel = new InfoPanel();
     }
 }
 
