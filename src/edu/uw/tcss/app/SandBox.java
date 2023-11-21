@@ -2,6 +2,7 @@ package edu.uw.tcss.app;
 
 import java.util.logging.Logger;
 import model.Board;
+import view.TetrisGUI;
 
 /**
  * Class to execute new Board Game
@@ -28,6 +29,8 @@ public final class SandBox {
      * @param theArgs Used for command line input.
      */
     public static void main(final String[] theArgs) {
+
+        javax.swing.SwingUtilities.invokeLater(TetrisGUI::CreateAndShowGUI);
 
         final Board b = new Board();
 
