@@ -11,6 +11,8 @@ public class TetrisGUI extends JPanel {
 
     private JPanel myInfoPanel;
 
+    private static JFrame window = new JFrame("A Message");
+
 
     public TetrisGUI() {
         super();
@@ -23,7 +25,6 @@ public class TetrisGUI extends JPanel {
                 new TetrisGUI();
 
         final Dimension frameSize = new Dimension(400, 400);
-        final JFrame window = new JFrame("A Message");
 
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setSize(frameSize);
@@ -31,6 +32,12 @@ public class TetrisGUI extends JPanel {
         window.pack();
         window.setVisible(true);
     }
+
+    public JFrame getWindow() {
+        return window;
+    }
+
+
 
     public void buildComponents() {
         myGamePanel = new GamePanel(); // i dunno
