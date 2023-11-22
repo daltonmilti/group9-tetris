@@ -32,23 +32,23 @@ public final class SandBox {
 
         javax.swing.SwingUtilities.invokeLater(TetrisGUI::CreateAndShowGUI);
 
-        final Board b = new Board();
-
-        b.newGame();
-        LOGGER.info(b.toString());
-
-        b.step();
-        LOGGER.info(b.toString());
-        b.rotateCW();
-        LOGGER.info(b.toString());
-        b.rotateCW();
-        LOGGER.info(b.toString());
-        b.rotateCW();
-        LOGGER.info(b.toString());
-        b.step();
-        LOGGER.info(b.toString());
-        b.drop();
-        LOGGER.info(b.toString());
+//        final Board b = new Board();
+//
+//        b.newGame();
+//        LOGGER.info(b.toString());
+//
+//        b.step();
+//        LOGGER.info(b.toString());
+//        b.rotateCW();
+//        LOGGER.info(b.toString());
+//        b.rotateCW();
+//        LOGGER.info(b.toString());
+//        b.rotateCW();
+//        LOGGER.info(b.toString());
+//        b.step();
+//        LOGGER.info(b.toString());
+//        b.drop();
+//        LOGGER.info(b.toString());
 
     }
 

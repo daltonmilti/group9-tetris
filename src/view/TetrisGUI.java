@@ -3,15 +3,11 @@ package view;
 import javax.swing.*;
 import java.awt.*;
 
-public class TetrisGUI extends JPanel {
+public final class TetrisGUI extends JPanel {
 
-    private JPanel myGamePanel;
+    private JPanel myLeftPanel;
 
-    private JPanel myNextPiecePanel;
-
-    private JPanel myInfoPanel;
-
-    private static JFrame window = new JFrame("A Message");
+    private JPanel myRightPanel;
 
 
     public TetrisGUI() {
@@ -24,34 +20,26 @@ public class TetrisGUI extends JPanel {
         final TetrisGUI mainPanel =
                 new TetrisGUI();
 
-        final Dimension frameSize = new Dimension(400, 400);
+        mainPanel.setPreferredSize(new Dimension(800, 1000));
+
+        JFrame window = new JFrame("Group 9 Tetris");
 
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setSize(frameSize);
         window.setContentPane(mainPanel);
         window.pack();
         window.setVisible(true);
     }
 
-    public JFrame getWindow() {
-        return window;
-    }
-
 
 
     public void buildComponents() {
-        myGamePanel = new GamePanel(); // i dunno
-        myNextPiecePanel = new JPanel();
-        myInfoPanel = new JPanel();
-
+        myLeftPanel = new LeftPanel();
+        myRightPanel = new RightPanel();
     }
 
     private void layoutComponents() {
-
-        final JPanel mainPanel = new JPanel();
-        mainPanel.add(myGamePanel);
-        mainPanel.add(myNextPiecePanel);
-        mainPanel.add(myInfoPanel);
+        add(myLeftPanel);
+        add(myRightPanel);
     }
 }
 

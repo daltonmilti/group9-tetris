@@ -1,11 +1,13 @@
 package view;
 
 import javax.swing.*;
+import java.awt.*;
 
-public class GamePanel extends JPanel {
+public final class GamePanel extends JPanel {
 
     public GamePanel() {
-
+        setPreferredSize(new Dimension(450, 1000));
+        setBackground(Color.RED);
     }
 
 }
