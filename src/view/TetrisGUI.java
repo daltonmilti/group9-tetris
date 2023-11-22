@@ -24,10 +24,11 @@ public class TetrisGUI extends JPanel {
         final TetrisGUI mainPanel =
                 new TetrisGUI();
 
-        final Dimension frameSize = new Dimension(400, 400);
+//        final Dimension frameSize = new Dimension(400, 400);
 
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setSize(frameSize);
+//        window.setSize(frameSize);
+        window.setPreferredSize(new Dimension(300, 400));
         window.setContentPane(mainPanel);
         window.pack();
         window.setVisible(true);
