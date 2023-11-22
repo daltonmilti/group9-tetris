@@ -11,7 +11,7 @@ public class TetrisGUI extends JPanel {
 
     private JPanel myInfoPanel;
 
-    private static JFrame window = new JFrame("A Message");
+    private static JFrame window = new JFrame("Tetris");
 
 
     public TetrisGUI() {
@@ -21,14 +21,15 @@ public class TetrisGUI extends JPanel {
     }
 
     public static void CreateAndShowGUI() {
-        final TetrisGUI mainPanel =
-                new TetrisGUI();
+        final TetrisGUI mainPanel = new TetrisGUI();
 
 //        final Dimension frameSize = new Dimension(400, 400);
 
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 //        window.setSize(frameSize);
         window.setPreferredSize(new Dimension(300, 400));
+        final TetrisMenuBar menuBar = new TetrisMenuBar();
+        window.setJMenuBar(menuBar);
         window.setContentPane(mainPanel);
         window.pack();
         window.setVisible(true);
@@ -49,6 +50,8 @@ public class TetrisGUI extends JPanel {
 
     private void layoutComponents() {
 
+        final TetrisMenuBar menuBar = new TetrisMenuBar();
+        window.add(menuBar);
         final JPanel mainPanel = new JPanel();
         mainPanel.add(myGamePanel);
         mainPanel.add(myNextPiecePanel);
