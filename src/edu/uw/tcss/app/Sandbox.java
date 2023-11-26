@@ -10,9 +10,9 @@ import view.TetrisGUI;
  * @author Alan Fowler (acfowler@uw.edu)
  * @version Autumn 2023
  */
-public final class Tetris {
+public final class Sandbox {
 
-    private Tetris() {
+    private Sandbox() {
         super();
     }
 

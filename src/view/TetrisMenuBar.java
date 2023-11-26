@@ -34,7 +34,7 @@ public class TetrisMenuBar extends JMenuBar {
 
         final JMenuItem newGameItem = new JMenuItem("New Game");
         newGameItem.addActionListener(theE -> JOptionPane.
-                showMessageDialog(this, "a new game is starting"));
+                showMessageDialog(this, "A New Game is Starting"));
         menu.add(newGameItem);
 
         final JMenuItem exitItem = new JMenuItem("Exit");

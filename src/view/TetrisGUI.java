@@ -3,6 +3,7 @@ package view;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import javax.swing.JFrame;
+import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 
 /**
@@ -27,19 +28,24 @@ public final class TetrisGUI extends JPanel {
     private JFrame myWindow;
 
     /**
+     * The Tetris Menu Bar.
+     */
+    private JMenuBar myMenuBar;
+
+    /**
      * The Tetris Main Panel.
      */
     private JPanel myMainPanel;
 
     /**
-     * The Tetris Game Panel.
-     */
-    private JPanel myGamePanel;
-
-    /**
      * The Tetris Right Panel. Used to organize myNextPiecePanel and myInfoPanel.
      */
     private JPanel myRightPanel;
+
+    /**
+     * The Tetris Game Panel.
+     */
+    private JPanel myGamePanel;
 
     /**
      * The Tetris Next Piece Panel.
@@ -67,6 +73,9 @@ public final class TetrisGUI extends JPanel {
 
         //Frame
         myWindow = new JFrame("Tetris - Group 9");
+
+        //Menu Bar
+        myMenuBar = new TetrisMenuBar();
 
         //MainPanel
         myMainPanel = new JPanel();
@@ -98,6 +107,7 @@ public final class TetrisGUI extends JPanel {
         myMainPanel.add(myRightPanel);
 
         //Window
+        myWindow.setJMenuBar(myMenuBar);
         myWindow.add(myMainPanel);
         myWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         myWindow.setContentPane(myMainPanel);
