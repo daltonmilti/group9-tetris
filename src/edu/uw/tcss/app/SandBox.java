@@ -1,6 +1,5 @@
 package edu.uw.tcss.app;
 
-import java.util.logging.Logger;
 import view.TetrisGUI;
 
 /**
@@ -12,12 +11,6 @@ import view.TetrisGUI;
  * @version Autumn 2023
  */
 public final class SandBox {
-
-    /**
-     * Initilization of Logger object used for output.
-     */
-    private static final Logger LOGGER = Logger.getLogger(SandBox.class.getName());
-
 
     private SandBox() {
         super();
