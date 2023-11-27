@@ -1,7 +1,6 @@
 package edu.uw.tcss.app;
 
 import java.util.logging.Logger;
-import model.Board;
 import view.TetrisGUI;
 
 /**
@@ -29,27 +28,7 @@ public final class SandBox {
      * @param theArgs Used for command line input.
      */
     public static void main(final String[] theArgs) {
-
         javax.swing.SwingUtilities.invokeLater(TetrisGUI::createAndShowGUI);
-
-        final Board b = new Board();
-
-        b.newGame();
-        LOGGER.info(b.toString());
-
-        b.step();
-        LOGGER.info(b.toString());
-        b.rotateCW();
-        LOGGER.info(b.toString());
-        b.rotateCW();
-        LOGGER.info(b.toString());
-        b.rotateCW();
-        LOGGER.info(b.toString());
-        b.step();
-        LOGGER.info(b.toString());
-        b.drop();
-        LOGGER.info(b.toString());
-
     }
 
 }
