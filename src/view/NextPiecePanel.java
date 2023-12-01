@@ -19,6 +19,8 @@ import model.TetrisPiece;
  */
 public final class NextPiecePanel extends JPanel {
 
+    private static int cnt;
+
     /**
      * Keeping the T piece in the middle.
      * This is place holder value, will later be calculated
@@ -38,6 +40,10 @@ public final class NextPiecePanel extends JPanel {
      */
     public NextPiecePanel() {
         super();
+        if (cnt > 0) {
+            throw new IllegalStateException();
+        }
+        cnt++;
         this.setPreferredSize(
              new Dimension(TetrisGUI.SIZE / 2, TetrisGUI.SIZE / 2));
         this.setBackground(Color.BLUE);

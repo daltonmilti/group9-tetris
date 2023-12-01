@@ -6,7 +6,10 @@
 
 package model;
 
-
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -33,10 +36,11 @@ import model.wallkicks.WallKick;
  * @author Alan Fowler
  * @version 1.3
  */
-public class Board implements BoardInterface {
+public class Board implements BoardInterface, PropertyChangeBoard {
 
     // Class constants
-    
+    private static int cnt;
+
     /**
      * Default width of a Tetris game board.
      */
@@ -96,6 +100,8 @@ public class Board implements BoardInterface {
      * down movement in the drop.
      */
     private boolean myDrop;
+
+    private final PropertyChangeSupport myPcs;
     
     // Constructors
 
@@ -115,13 +121,16 @@ public class Board implements BoardInterface {
      */
     public Board(final int theWidth, final int theHeight) {
         super();
+        if (cnt > 0) {
+            throw new IllegalStateException();
+        }
+        cnt++;
         myWidth = theWidth;
         myHeight = theHeight;
         myFrozenBlocks = new LinkedList<>();
-         
         myNonRandomPieces = new ArrayList<>();
         mySequenceIndex = 0;
-        
+        myPcs = new PropertyChangeSupport(this);
         /*  myNextPiece and myCurrentPiece
          *  are initialized by the newGame() method.
          */
@@ -169,7 +178,7 @@ public class Board implements BoardInterface {
         myGameOver = false;
         myCurrentPiece = nextMovablePiece(true);
         myDrop = false;
-        
+
         // TODO Publish Update!
     }
 
@@ -218,7 +227,7 @@ public class Board implements BoardInterface {
             if (!myGameOver) {
                 myCurrentPiece = nextMovablePiece(false);
             }
-            // TODO Publish Update!
+            myPcs.firePropertyChange(CURRENT_PIECE_CHANGING, null, myCurrentPiece);
         }
     }
 
@@ -421,7 +430,7 @@ public class Board implements BoardInterface {
             }
             if (complete) {
                 completeRows.add(myFrozenBlocks.indexOf(row));
-             // TODO Publish Update!
+                // TODO Publish Update!
             }
         }
         // loop through list backwards removing items by index
@@ -475,7 +484,7 @@ public class Board implements BoardInterface {
             row[thePoint.x()] = theBlock;
         } else if (!myGameOver) {
             myGameOver = true;
-            // TODO Publish Update!
+            myPcs.firePropertyChange(GAME_END, null, true);
         }
     }
 
@@ -549,11 +558,32 @@ public class Board implements BoardInterface {
             myNextPiece = myNonRandomPieces.get(mySequenceIndex++);
         }
         if (share && !myGameOver) {
-            // TODO Publish Update!
+            myPcs.firePropertyChange("NextPieceHasChanged", null, myNextPiece);
         }
-    }    
+    }
 
-    
+    @Override
+    public void addPropertyChangeListener(final PropertyChangeListener theListener) {
+        myPcs.addPropertyChangeListener(theListener);
+    }
+
+    @Override
+    public void addPropertyChangeListener(final String thePropertyName,
+                                          final PropertyChangeListener theListener) {
+        myPcs.addPropertyChangeListener(thePropertyName, theListener);
+    }
+
+    @Override
+    public void removePropertyChangeListener(final PropertyChangeListener theListener) {
+        myPcs.removePropertyChangeListener(theListener);
+    }
+
+    @Override
+    public void removePropertyChangeListener(final String thePropertyName,
+                                             final PropertyChangeListener theListener) {
+        myPcs.removePropertyChangeListener(thePropertyName, theListener);
+    }
+
     // Inner classes
 
     /**
@@ -597,5 +627,5 @@ public class Board implements BoardInterface {
         
     } // end inner class BoardData
 
-    
+
 }

@@ -15,11 +15,17 @@ import javax.swing.JPanel;
  */
 public final class InfoPanel extends JPanel {
 
+    private static int cnt;
+
     /**
      * Creates the info panel for the Tetris GUI.
      */
     public InfoPanel() {
         super();
+        if (cnt > 0) {
+            throw new IllegalStateException();
+        }
+        cnt++;
         this.setPreferredSize(
                 new Dimension(TetrisGUI.SIZE / 2, TetrisGUI.SIZE / 2));
         this.setBackground(Color.GREEN);

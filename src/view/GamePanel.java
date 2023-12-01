@@ -5,6 +5,9 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import javax.swing.JPanel;
+
+import model.Board;
+import model.BoardInterface;
 import model.Point;
 import model.TetrisPiece;
 
@@ -50,6 +53,9 @@ public final class GamePanel extends JPanel {
     /** Y offset for the T block. */
     public static final int T_SPACER = 16;
 
+    /** Used for debugging */
+    private static int cnt;
+
     /** The stroke width in pixels. */
     private static final int STROKE_WIDTH = 2;
 
@@ -64,8 +70,13 @@ public final class GamePanel extends JPanel {
      */
     public GamePanel() {
         super();
+        if (cnt > 0) {
+            throw new IllegalStateException();
+        }
+        cnt++;
         this.setPreferredSize(new Dimension(TetrisGUI.SIZE / 2, TetrisGUI.SIZE));
         this.setBackground(Color.RED);
+
     }
 
     @Override
@@ -85,14 +96,20 @@ public final class GamePanel extends JPanel {
                 makeBlock(g2d, p.x(), p.y(), allColors[i], spacing[i]);
             }
         }
+//        g2d.setPaint(Color.BLACK);
+//        for (int i = 0; i < TetrisGUI.SIZE / (SQUARE_SIZE * 2); i++) {
+//            for (int k = 0; k < TetrisGUI.SIZE / SQUARE_SIZE; k++) {
+//                g2d.drawRect(i * SQUARE_SIZE, k * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
+//            }
+//        }
     }
     private void makeBlock(final Graphics2D theG2D, final int theX, final int theY,
                            final Color theColor, final int theSpacer) {
         final int x = theX * SQUARE_SIZE;
         final int y = theY * SQUARE_SIZE + theSpacer * SQUARE_SIZE;
         theG2D.setPaint(Color.BLACK);
-        theG2D.fillRect(x, y, SQUARE_SIZE, SQUARE_SIZE);
+        theG2D.fillRect(x, y, SQUARE_SIZE + 1, SQUARE_SIZE + 1);
         theG2D.setPaint(theColor);
-        theG2D.fillRect(x + 1, y + 1, SQUARE_SIZE - 2, SQUARE_SIZE - 2);
+        theG2D.fillRect(x + 1, y + 1, SQUARE_SIZE - 1, SQUARE_SIZE - 1);
     }
 }
