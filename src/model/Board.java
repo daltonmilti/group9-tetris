@@ -6,8 +6,6 @@
 
 package model;
 
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
@@ -39,6 +37,7 @@ import model.wallkicks.WallKick;
 public class Board implements BoardInterface, PropertyChangeBoard {
 
     // Class constants
+    /** Used for debugging */
     private static int cnt;
 
     /**
@@ -101,6 +100,7 @@ public class Board implements BoardInterface, PropertyChangeBoard {
      */
     private boolean myDrop;
 
+    /** PropertyChangeSupport for all listeners */
     private final PropertyChangeSupport myPcs;
     
     // Constructors
@@ -179,7 +179,7 @@ public class Board implements BoardInterface, PropertyChangeBoard {
         myCurrentPiece = nextMovablePiece(true);
         myDrop = false;
 
-        // TODO Publish Update!
+        myPcs.firePropertyChange(CURRENT_PIECE_CHANGING, null, myCurrentPiece);
     }
 
     /**
@@ -368,7 +368,7 @@ public class Board implements BoardInterface, PropertyChangeBoard {
             myCurrentPiece = theMovedPiece;
             result = true;
             if (!myDrop) {
-                // TODO Publish Update!
+                myPcs.firePropertyChange(CURRENT_PIECE_CHANGING, null, myCurrentPiece);
             }
         }
         return result;
@@ -430,7 +430,7 @@ public class Board implements BoardInterface, PropertyChangeBoard {
             }
             if (complete) {
                 completeRows.add(myFrozenBlocks.indexOf(row));
-                // TODO Publish Update!
+                myPcs.firePropertyChange(ROW_CHANGE, null, completeRows);
             }
         }
         // loop through list backwards removing items by index
@@ -558,7 +558,7 @@ public class Board implements BoardInterface, PropertyChangeBoard {
             myNextPiece = myNonRandomPieces.get(mySequenceIndex++);
         }
         if (share && !myGameOver) {
-            myPcs.firePropertyChange("NextPieceHasChanged", null, myNextPiece);
+            myPcs.firePropertyChange(NEXT_PIECE_CHANGE, null, myNextPiece);
         }
     }
 
