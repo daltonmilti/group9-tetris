@@ -1,7 +1,12 @@
 package view;
 
+import model.Board;
+import model.BoardInterface;
+
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
@@ -18,9 +23,19 @@ import javax.swing.JPanel;
 public final class TetrisGUI extends JPanel {
 
     /**
+     * The main board used for the Tetris project.
+     */
+    public static final BoardInterface THE_BOARD = new Board();
+
+    /**
      * Constanst used to size screen.
      */
     public static final int SIZE = 800;
+
+    /**
+     * Used for debugging, if value is ever greater than one, an exception is thrown.
+     */
+    private static int cnt;
 
     /**
      * The Tetris Frame.
@@ -59,6 +74,9 @@ public final class TetrisGUI extends JPanel {
 
     private TetrisGUI() {
         super();
+        if (cnt > 0) {
+            throw new IllegalStateException();
+        }
         buildComponents();
         layoutComponents();
     }
@@ -70,7 +88,6 @@ public final class TetrisGUI extends JPanel {
         final TetrisGUI l = new TetrisGUI();
     }
     private void buildComponents() {
-
         //Frame
         myWindow = new JFrame("Tetris - Group 9");
 
@@ -79,14 +96,9 @@ public final class TetrisGUI extends JPanel {
 
         //MainPanel
         myMainPanel = new JPanel();
-        myMainPanel.setSize(new Dimension(SIZE, SIZE));
-        myMainPanel.setLayout(new GridLayout(1, 0, 2, 0));
 
         //RightPanel
         myRightPanel = new JPanel();
-        myRightPanel.setPreferredSize(
-                new Dimension(SIZE / 2, SIZE));
-        myRightPanel.setLayout(new GridLayout(0, 1, 0, 2));
 
         //GamePanel
         myGamePanel = new GamePanel();
@@ -96,13 +108,20 @@ public final class TetrisGUI extends JPanel {
 
         //InfoPanel
         myInfoPanel = new InfoPanel();
+
     }
     private void layoutComponents() {
+
         //Right Panel
+        myRightPanel.setPreferredSize(
+                new Dimension(SIZE / 2, SIZE));
+        myRightPanel.setLayout(new GridLayout(0, 1, 0, 0));
         myRightPanel.add(myNextPiecePanel);
         myRightPanel.add(myInfoPanel);
 
         //Main Panel
+        myMainPanel.setSize(new Dimension(SIZE, SIZE));
+        myMainPanel.setLayout(new GridLayout(1, 0, 0, 0));
         myMainPanel.add(myGamePanel);
         myMainPanel.add(myRightPanel);
 
@@ -111,9 +130,18 @@ public final class TetrisGUI extends JPanel {
         myWindow.add(myMainPanel);
         myWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         myWindow.setContentPane(myMainPanel);
-        myWindow.setResizable(false);
+        myWindow.setResizable(true);
         myWindow.pack();
         myWindow.setVisible(true);
+    }
+
+    private static final class MyKeyAdapter extends KeyAdapter {
+        @Override
+        public void keyReleased(final KeyEvent theE) {
+            super.keyReleased(theE);
+            System.out.println("Key " + theE.getKeyChar());
+            System.out.println("Code " + theE.getKeyCode());
+        }
     }
 }
 

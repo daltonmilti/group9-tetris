@@ -23,5 +23,4 @@ public final class SandBox {
     public static void main(final String[] theArgs) {
         javax.swing.SwingUtilities.invokeLater(TetrisGUI::createAndShowGUI);
     }
-
 }
