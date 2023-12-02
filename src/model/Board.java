@@ -179,7 +179,10 @@ public class Board implements BoardInterface, PropertyChangeBoard {
         myCurrentPiece = nextMovablePiece(true);
         myDrop = false;
 
-        myPcs.firePropertyChange(CURRENT_PIECE_CHANGING, null, myCurrentPiece);
+        //listens for current piece changing, not new game starting, new game button doesn't fire this...
+        //myPcs.firePropertyChange(CURRENT_PIECE_CHANGING, null, myCurrentPiece);
+
+        myPcs.firePropertyChange(GAME_STARTING, null, true);
     }
 
     /**
