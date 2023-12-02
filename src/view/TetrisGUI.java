@@ -2,14 +2,17 @@ package view;
 
 import model.Board;
 import model.BoardInterface;
+import model.PropertyChangeBoard;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import javax.swing.JFrame;
-import javax.swing.JMenuBar;
-import javax.swing.JPanel;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import javax.swing.*;
 
 /**
  * Creates a Tetris GUI.
@@ -20,16 +23,22 @@ import javax.swing.JPanel;
  * @author chriseetwo
  * @version Autumn 2023
  */
-public final class TetrisGUI extends JPanel {
+public final class TetrisGUI implements PropertyChangeListener {
 
     /**
      * The main board used for the Tetris project.
      */
-    public static final BoardInterface THE_BOARD = new Board();
+    public static final BoardInterface BOARD = new Board();
 
-    /**
-     * Constanst used to size screen.
-     */
+    /** Used to update step() the board after some time. */
+    private static final Timer TIMER = new Timer(1000, new ActionListener() {
+        @Override
+        public void actionPerformed(final ActionEvent theE) {
+            BOARD.step();
+        }
+    });
+
+    /** Constanst used to size screen. */
     public static final int SIZE = 800;
 
     /**
@@ -37,9 +46,7 @@ public final class TetrisGUI extends JPanel {
      */
     private static int cnt;
 
-    /**
-     * The Tetris Frame.
-     */
+    /** The Tetris Frame. */
     private JFrame myWindow;
 
     /**
@@ -120,10 +127,11 @@ public final class TetrisGUI extends JPanel {
         myRightPanel.add(myInfoPanel);
 
         //Main Panel
-        myMainPanel.setSize(new Dimension(SIZE, SIZE));
+        myMainPanel.setPreferredSize(new Dimension(SIZE, SIZE));
         myMainPanel.setLayout(new GridLayout(1, 0, 0, 0));
         myMainPanel.add(myGamePanel);
         myMainPanel.add(myRightPanel);
+        myWindow.addKeyListener(new MyKeyAdapter());
 
         //Window
         myWindow.setJMenuBar(myMenuBar);
@@ -135,12 +143,33 @@ public final class TetrisGUI extends JPanel {
         myWindow.setVisible(true);
     }
 
+    @Override
+    public void propertyChange(final PropertyChangeEvent theEvt) {
+        if (PropertyChangeBoard.GAME_STARTING.equals(theEvt.getPropertyName())) {
+            gameStart();
+        }
+    }
+
+    private void gameStart() {
+        TIMER.start();
+        BOARD.newGame();
+    }
+
     private static final class MyKeyAdapter extends KeyAdapter {
         @Override
         public void keyReleased(final KeyEvent theE) {
-            super.keyReleased(theE);
-            System.out.println("Key " + theE.getKeyChar());
-            System.out.println("Code " + theE.getKeyCode());
+            if (theE.getKeyCode() == KeyEvent.VK_A || theE.getKeyCode() == KeyEvent.VK_LEFT) {
+                BOARD.left();
+            } else if (theE.getKeyCode() == KeyEvent.VK_D
+                       || theE.getKeyCode() == KeyEvent.VK_RIGHT) {
+                BOARD.right();
+            } else if (theE.getKeyCode() == KeyEvent.VK_S
+                       || theE.getKeyCode() == KeyEvent.VK_DOWN) {
+                BOARD.down();
+            } else if (theE.getKeyCode() == KeyEvent.VK_W
+                       || theE.getKeyCode() == KeyEvent.VK_UP) {
+                BOARD.rotateCW();
+            }
         }
     }
 }

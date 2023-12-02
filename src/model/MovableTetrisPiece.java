@@ -268,6 +268,4 @@ public final class MovableTetrisPiece implements MovableTetrisPieceInterface {
     private Point[] getLocalPoints() {
         return getPoints(null);
     }
-
-
 }

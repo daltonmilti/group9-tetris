@@ -10,17 +10,20 @@ import java.beans.PropertyChangeListener;
  */
 public interface PropertyChangeBoard {
 
-    /** Used to noitify listeners the game is ending. */
+    /** Used to notify listeners the game is ending. */
     String GAME_END = "The Game is Ending";
 
-    /** Used to noitify listeners the game is ending. */
+    /** Used to notify listeners the game is ending. */
     String CURRENT_PIECE_CHANGING = "Current Piece is Changing";
 
-    /** Used to noitify listeners the frozen blocks changing. */
+    /** Used to notify listeners the frozen blocks changing. */
     String ROW_CHANGE = "My Rows Have Changed";
 
-    /** Used to noitify listeners the next piece changing. */
+    /** Used to notify listeners the next piece changing. */
     String NEXT_PIECE_CHANGE = "Next Piece is Changing";
+
+    /** Used to notify listeners the game is starting. */
+    String GAME_STARTING = "New Game is Starting";
 
     /**
      * Used for adding a PropertyChangeListener. This listener is registered to all properties.

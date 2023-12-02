@@ -1,6 +1,9 @@
 package view;
 
 import java.awt.event.KeyEvent;
+import java.beans.PropertyChangeSupport;
+import java.util.Observable;
+import java.util.Observer;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -14,6 +17,8 @@ import javax.swing.JOptionPane;
  */
 public class TetrisMenuBar extends JMenuBar {
 
+    /** */
+    private PropertyChangeSupport myPcs;
     /**
      * Constructor.
      */
@@ -25,6 +30,7 @@ public class TetrisMenuBar extends JMenuBar {
     private void createMenuBar() {
         final JMenu menu = menuBuilder();
         this.add(menu);
+        myPcs = new PropertyChangeSupport(this);
     }
 
 
@@ -33,8 +39,8 @@ public class TetrisMenuBar extends JMenuBar {
         final JMenu menu = new JMenu("File");
 
         final JMenuItem newGameItem = new JMenuItem("New Game");
-        newGameItem.addActionListener(theE -> JOptionPane.
-                showMessageDialog(this, "A New Game is Starting"));
+        newGameItem.addActionListener(theE -> myPcs.firePropertyChange(
+                                  "New Game is Starting", null, true));
         menu.add(newGameItem);
 
         final JMenuItem exitItem = new JMenuItem("Exit");
@@ -54,7 +60,4 @@ public class TetrisMenuBar extends JMenuBar {
 
         return menu;
     }
-
-
-
 }
