@@ -4,12 +4,16 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import javax.swing.JPanel;
 
 import model.Board;
 import model.BoardInterface;
 import model.Point;
 import model.TetrisPiece;
+
+import static model.PropertyChangeBoard.CURRENT_PIECE_CHANGING;
 
 /**
  * Creates the game portion of the Tetris GUI.
@@ -19,7 +23,7 @@ import model.TetrisPiece;
  * @author chriseetwo
  * @version Autumn 2023
  */
-public final class GamePanel extends JPanel {
+public final class GamePanel extends JPanel implements PropertyChangeListener {
 
     /** A set size for the width and height of a block. */
     public static final int SQUARE_SIZE = 40;
@@ -64,6 +68,9 @@ public final class GamePanel extends JPanel {
 
     /** The height for the rectangle. */
     private static final int RECTANGLE_HEIGHT = 50;
+
+    /** The current piece */
+    private TetrisPiece myCurrentPiece;
 
     /**
      * Creates the game panel for the Tetris GUI.
@@ -111,5 +118,13 @@ public final class GamePanel extends JPanel {
         theG2D.fillRect(x, y, SQUARE_SIZE + 1, SQUARE_SIZE + 1);
         theG2D.setPaint(theColor);
         theG2D.fillRect(x + 1, y + 1, SQUARE_SIZE - 1, SQUARE_SIZE - 1);
+    }
+
+    @Override
+    public void propertyChange(final PropertyChangeEvent theEvent) {
+        if (CURRENT_PIECE_CHANGING.equals(theEvent.getPropertyName())) {
+            myCurrentPiece = (TetrisPiece) theEvent.getNewValue();
+            repaint();
+        }
     }
 }
