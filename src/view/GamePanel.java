@@ -6,14 +6,15 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import javax.swing.JPanel;
 
 import model.Board;
-import model.BoardInterface;
 import model.Point;
 import model.TetrisPiece;
 
-import static model.PropertyChangeBoard.CURRENT_PIECE_CHANGING;
+import static model.PropertyChangeBoard.*;
+import static view.TetrisGUI.BOARD;
 
 /**
  * Creates the game portion of the Tetris GUI.
@@ -73,8 +74,26 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
     private TetrisPiece myCurrentPiece;
 
     /**
-     * Creates the game panel for the Tetris GUI.
+     *
      */
+    final TetrisPiece[] myTetrisPieces = TetrisPiece.values();
+
+    /**
+     *
+     */
+    final Color[] myPieceColors = {Color.CYAN, ORANGE, Color.BLUE, Color.YELLOW,
+            OTHER_RED, Color.MAGENTA, Color.GREEN};
+
+    /**
+     *
+     */
+    final int[] mySpacing = {I_SPACER, L_SPACER, J_SPACER, O_SPACER,
+            Z_SPACER, S_SPACER, T_SPACER};
+
+    /**
+     * Board from TetrisGUI
+     */
+
     public GamePanel() {
         super();
         if (cnt > 0) {
@@ -84,47 +103,92 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
         this.setPreferredSize(new Dimension(TetrisGUI.SIZE / 2, TetrisGUI.SIZE));
         this.setBackground(Color.RED);
 
+        addPropertyChangeListener(this);
+
+        myCurrentPiece = TetrisPiece.getRandomPiece();
     }
 
     @Override
     protected void paintComponent(final Graphics theG) {
-        final TetrisPiece[] allTetrisPieces = TetrisPiece.values();
-        final Color[] allColors = {Color.CYAN, ORANGE, Color.BLUE, Color.YELLOW,
-                                   OTHER_RED, Color.MAGENTA, Color.GREEN};
-        final int[] spacing = {I_SPACER, L_SPACER, J_SPACER, O_SPACER,
-                               Z_SPACER, S_SPACER, T_SPACER};
-
         super.paintComponent(theG);
         final Graphics2D g2d = (Graphics2D) theG;
 
-        for (int i = 0; i < allTetrisPieces.length; i++) {
-            final Point[] k = allTetrisPieces[i].getPoints();
-            for (final Point p : k) {
-                makeBlock(g2d, p.x(), p.y(), allColors[i], spacing[i]);
+        if (myCurrentPiece != null) {
+            int index = -1;
+            for (int i = 0; i < myTetrisPieces.length; i++) {
+                if (myTetrisPieces[i] == myCurrentPiece) {
+                    index = i;
+                    break;
+                }
+            }
+
+            if (index != -1) {
+                final Color color = myPieceColors[index];
+                final int spacer = mySpacing[index];
+                for (final Point p : myCurrentPiece.getPoints()) {
+                    makeBlock(g2d, p.x(), p.y(), color, spacer);
+                }
             }
         }
-//        g2d.setPaint(Color.BLACK);
-//        for (int i = 0; i < TetrisGUI.SIZE / (SQUARE_SIZE * 2); i++) {
-//            for (int k = 0; k < TetrisGUI.SIZE / SQUARE_SIZE; k++) {
-//                g2d.drawRect(i * SQUARE_SIZE, k * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
+
+        g2d.setPaint(Color.BLACK);
+        for (int row = 0; row < 10; row++) {
+            for (int col = 0; col < 20; col++) {
+                g2d.drawRect(row * SQUARE_SIZE, col * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
+            }
+        }
+
+        //        for (int i = 0; i < allTetrisPieces.length; i++) {
+//            final Point[] k = allTetrisPieces[i].getPoints();
+//            for (final Point p : k) {
+//                makeBlock(g2d, p.x(), p.y(), allColors[i], spacing[i]);
 //            }
 //        }
+
     }
     private void makeBlock(final Graphics2D theG2D, final int theX, final int theY,
                            final Color theColor, final int theSpacer) {
         final int x = theX * SQUARE_SIZE;
-        final int y = theY * SQUARE_SIZE + theSpacer * SQUARE_SIZE;
+        final int y = theY * SQUARE_SIZE;
         theG2D.setPaint(Color.BLACK);
         theG2D.fillRect(x, y, SQUARE_SIZE + 1, SQUARE_SIZE + 1);
         theG2D.setPaint(theColor);
         theG2D.fillRect(x + 1, y + 1, SQUARE_SIZE - 1, SQUARE_SIZE - 1);
     }
 
+
+    //we need to make sure that there's a different publisher from new piece panel right?
     @Override
     public void propertyChange(final PropertyChangeEvent theEvent) {
-        if (CURRENT_PIECE_CHANGING.equals(theEvent.getPropertyName())) {
-            myCurrentPiece = (TetrisPiece) theEvent.getNewValue();
-            repaint();
+        switch (theEvent.getPropertyName()) {
+            case CURRENT_PIECE_CHANGING:
+                handlePieceChanging((TetrisPiece) theEvent.getNewValue());
+            case GAME_STARTING:
+                handleGameStarting((Boolean) theEvent.getNewValue());
+            case GAME_END:
+                handleGameOver((Boolean) theEvent.getNewValue());
+            case ROW_CHANGE:
+                handleCompleteRows(((ArrayList<Integer>) theEvent.getNewValue()));
         }
+        repaint();
+    }
+
+    private void handleGameStarting(Boolean theNewGameStarting) {
+        //do something here
+        BOARD.newGame();
+    }
+
+    private void handleGameOver(Boolean theGameIsEnding) {
+        //do something here
+        //BOARD.myGameOver = true;
+        //i know its private i just write it like this as a reminder
+    }
+
+    private void handlePieceChanging(TetrisPiece theChangingPiece) {
+        myCurrentPiece = theChangingPiece;
+    }
+
+    private void handleCompleteRows(ArrayList<Integer> theCompleteRows) {
+        //do something there
     }
 }
