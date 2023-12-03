@@ -1,18 +1,17 @@
 package view;
 
-import model.Board;
-import model.BoardInterface;
-import model.PropertyChangeBoard;
-
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JMenuBar;
+import javax.swing.JPanel;
+import javax.swing.Timer;
+import model.Board;
+import model.BoardInterface;
 
 /**
  * Creates a Tetris GUI.
@@ -30,16 +29,11 @@ public final class TetrisGUI implements PropertyChangeListener {
      */
     public static final BoardInterface BOARD = new Board();
 
-    /** Used to update step() the board after some time. */
-    private static final Timer TIMER = new Timer(1000, new ActionListener() {
-        @Override
-        public void actionPerformed(final ActionEvent theE) {
-            BOARD.step();
-        }
-    });
-
     /** Constanst used to size screen. */
     public static final int SIZE = 800;
+
+    /** Used to update step() the board after some time. */
+    private static final Timer TIMER = new Timer(1000, theE -> BOARD.step());
 
     /**
      * Used for debugging, if value is ever greater than one, an exception is thrown.
@@ -134,18 +128,21 @@ public final class TetrisGUI implements PropertyChangeListener {
         myWindow.addKeyListener(new MyKeyAdapter());
 
         //Window
+        myWindow.setLayout(new GridLayout(1, 0, 0, 0));
         myWindow.setJMenuBar(myMenuBar);
         myWindow.add(myMainPanel);
         myWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         myWindow.setContentPane(myMainPanel);
-        myWindow.setResizable(true);
+        myWindow.setResizable(false);
         myWindow.pack();
         myWindow.setVisible(true);
+
+        myMenuBar.addPropertyChangeListener(this);
     }
 
     @Override
     public void propertyChange(final PropertyChangeEvent theEvt) {
-        if (PropertyChangeBoard.GAME_STARTING.equals(theEvt.getPropertyName())) {
+        if (BoardInterface.GAME_STARTING.equals(theEvt.getPropertyName())) {
             gameStart();
         }
     }
@@ -155,23 +152,31 @@ public final class TetrisGUI implements PropertyChangeListener {
         BOARD.newGame();
     }
 
-    private static final class MyKeyAdapter extends KeyAdapter {
+    private final class MyKeyAdapter extends KeyAdapter {
         @Override
         public void keyReleased(final KeyEvent theE) {
             if (theE.getKeyCode() == KeyEvent.VK_A || theE.getKeyCode() == KeyEvent.VK_LEFT) {
                 BOARD.left();
+                myGamePanel.repaint();
             } else if (theE.getKeyCode() == KeyEvent.VK_D
                        || theE.getKeyCode() == KeyEvent.VK_RIGHT) {
                 BOARD.right();
+                myGamePanel.repaint();
             } else if (theE.getKeyCode() == KeyEvent.VK_S
                        || theE.getKeyCode() == KeyEvent.VK_DOWN) {
                 BOARD.down();
+                myGamePanel.repaint();
+            } else if (theE.getKeyCode() == KeyEvent.VK_SPACE) {
+                BOARD.drop();
+                myGamePanel.repaint();
             } else if (theE.getKeyCode() == KeyEvent.VK_W
                        || theE.getKeyCode() == KeyEvent.VK_UP) {
                 BOARD.rotateCW();
+                myGamePanel.repaint();
             }
         }
     }
+
 }
 
 

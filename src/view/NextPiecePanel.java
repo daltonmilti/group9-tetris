@@ -1,7 +1,5 @@
 package view;
 
-import static model.PropertyChangeBoard.NEXT_PIECE_CHANGE;
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -9,6 +7,8 @@ import java.awt.Graphics2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.JPanel;
+
+import model.BoardInterface;
 import model.Point;
 import model.TetrisPiece;
 
@@ -59,6 +59,7 @@ public final class NextPiecePanel extends JPanel implements PropertyChangeListen
         this.setPreferredSize(
              new Dimension(TetrisGUI.SIZE / 2, TetrisGUI.SIZE / 2));
         this.setBackground(Color.BLUE);
+        TetrisGUI.BOARD.addPropertyChangeListener(this);
     }
 
     @Override
@@ -80,10 +81,9 @@ public final class NextPiecePanel extends JPanel implements PropertyChangeListen
             }
         }
     }
-
     @Override
     public void propertyChange(final PropertyChangeEvent theEvent) {
-        if (NEXT_PIECE_CHANGE.equals(theEvent.getPropertyName())) {
+        if (BoardInterface.NEXT_PIECE_CHANGE.equals(theEvent.getPropertyName())) {
             myNextPiece = (TetrisPiece) theEvent.getNewValue();
             repaint();
         }

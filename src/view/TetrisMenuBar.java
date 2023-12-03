@@ -1,9 +1,10 @@
 package view;
 
+import model.BoardInterface;
+
 import java.awt.event.KeyEvent;
+import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.util.Observable;
-import java.util.Observer;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -40,7 +41,7 @@ public class TetrisMenuBar extends JMenuBar {
 
         final JMenuItem newGameItem = new JMenuItem("New Game");
         newGameItem.addActionListener(theE -> myPcs.firePropertyChange(
-                                  "New Game is Starting", null, true));
+                BoardInterface.GAME_STARTING, null, true));
         menu.add(newGameItem);
 
         final JMenuItem exitItem = new JMenuItem("Exit");
@@ -59,5 +60,26 @@ public class TetrisMenuBar extends JMenuBar {
         menu.add(aboutItem);
 
         return menu;
+    }
+    @Override
+    public void addPropertyChangeListener(final PropertyChangeListener theListener) {
+        myPcs.addPropertyChangeListener(theListener);
+    }
+
+    @Override
+    public void addPropertyChangeListener(final String thePropertyName,
+                                          final PropertyChangeListener theListener) {
+        myPcs.addPropertyChangeListener(thePropertyName, theListener);
+    }
+
+    @Override
+    public void removePropertyChangeListener(final PropertyChangeListener theListener) {
+        myPcs.removePropertyChangeListener(theListener);
+    }
+
+    @Override
+    public void removePropertyChangeListener(final String thePropertyName,
+                                             final PropertyChangeListener theListener) {
+        myPcs.removePropertyChangeListener(thePropertyName, theListener);
     }
 }

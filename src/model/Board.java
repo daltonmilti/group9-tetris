@@ -34,7 +34,7 @@ import model.wallkicks.WallKick;
  * @author Alan Fowler
  * @version 1.3
  */
-public class Board implements BoardInterface, PropertyChangeBoard {
+public class Board implements BoardInterface {
 
     // Class constants
     /** Used for debugging */
@@ -178,7 +178,6 @@ public class Board implements BoardInterface, PropertyChangeBoard {
         myGameOver = false;
         myCurrentPiece = nextMovablePiece(true);
         myDrop = false;
-
         myPcs.firePropertyChange(CURRENT_PIECE_CHANGING, null, myCurrentPiece);
     }
 
@@ -299,9 +298,7 @@ public class Board implements BoardInterface, PropertyChangeBoard {
         }
     }
 
-    /**
-     * Drop the piece until piece is set.
-     */
+    /** Drop the piece until piece is set. */
     @Override
     public void drop() {
         if (!myGameOver) {

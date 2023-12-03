@@ -6,17 +6,11 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
 import javax.swing.JPanel;
-
-import model.Board;
+import model.BoardInterface;
 import model.MovableTetrisPiece;
 import model.Point;
 import model.TetrisPiece;
-
-import static model.PropertyChangeBoard.*;
-import static view.TetrisGUI.BOARD;
-
 /**
  * Creates the game portion of the Tetris GUI.
  * @author braggs03
@@ -74,7 +68,7 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
         this.setPreferredSize(new Dimension(TetrisGUI.SIZE / 2, TetrisGUI.SIZE));
         this.setBackground(Color.RED);
 
-        addPropertyChangeListener(this);
+        TetrisGUI.BOARD.addPropertyChangeListener(this);
 
         //I'm 99% we don't want to do this
         //myCurrentPiece = TetrisPiece.getRandomPiece();
@@ -86,36 +80,18 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
         final Graphics2D g2d = (Graphics2D) theG;
 
         if (myCurrentPiece != null) {
-            int index = -1;
-            for (int i = 0; i < myTetrisPieces.length; i++) {
-                if (myTetrisPieces[i] == myCurrentPiece) {
-                    index = i;
-                    break;
-                }
-            }
-
-            if (index != -1) {
-                final Color color = myPieceColors[index];
-                for (final Point p : myCurrentPiece.getPoints()) {
-                    makeBlock(g2d, p.x(), p.y(), color);
-                }
+            final Point[] i = myCurrentPiece.getBoardPoints();
+            for (final Point k : i) {
+                g2d.setPaint(Color.BLACK);
+                g2d.fillRect(k.x() * GamePanel.SQUARE_SIZE,
+                        k.y() * GamePanel.SQUARE_SIZE,
+                        GamePanel.SQUARE_SIZE, GamePanel.SQUARE_SIZE);
+                g2d.setPaint(Color.MAGENTA);
+                g2d.fillRect(k.x() * GamePanel.SQUARE_SIZE + 1,
+                        k.y() * GamePanel.SQUARE_SIZE + 1,
+                        GamePanel.SQUARE_SIZE - 2, GamePanel.SQUARE_SIZE - 2);
             }
         }
-
-        g2d.setPaint(Color.BLACK);
-        for (int row = 0; row < 10; row++) {
-            for (int col = 0; col < 20; col++) {
-                g2d.drawRect(row * SQUARE_SIZE, col * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
-            }
-        }
-
-        //        for (int i = 0; i < allTetrisPieces.length; i++) {
-//            final Point[] k = allTetrisPieces[i].getPoints();
-//            for (final Point p : k) {
-//                makeBlock(g2d, p.x(), p.y(), allColors[i], spacing[i]);
-//            }
-//        }
-
     }
     private void makeBlock(final Graphics2D theG2D, final int theX, final int theY,
                            final Color theColor) {
@@ -129,31 +105,9 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
 
     @Override
     public void propertyChange(final PropertyChangeEvent theEvent) {
-        switch (theEvent.getPropertyName()) {
-            case CURRENT_PIECE_CHANGING:
-                handlePieceChanging((MovableTetrisPiece) theEvent.getNewValue());
-            case ROW_CHANGE:
-                handleCompleteRows((ArrayList<Integer>) theEvent.getNewValue());
+        if (BoardInterface.CURRENT_PIECE_CHANGING.equals(theEvent.getPropertyName())) {
+            myCurrentPiece = (MovableTetrisPiece) theEvent.getNewValue();
+            repaint();
         }
-        repaint();
-    }
-
-    private void handleGameStarting(Boolean theNewGameStarting) {
-        //do something here
-        BOARD.newGame();
-    }
-
-    private void handleGameOver(Boolean theGameIsEnding) {
-        //do something here
-        //BOARD.myGameOver = true;
-        //i know its private i just write it like this as a reminder
-    }
-
-    private void handlePieceChanging(MovableTetrisPiece theChangingPiece) {
-        myCurrentPiece = theChangingPiece;
-    }
-
-    private void handleCompleteRows(ArrayList<Integer> theCompleteRows) {
-        //do something there in Sprint 3
     }
 }
