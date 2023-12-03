@@ -168,7 +168,7 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
             case GAME_END:
                 handleGameOver((Boolean) theEvent.getNewValue());
             case ROW_CHANGE:
-                handleCompleteRows(((ArrayList<Integer>) theEvent.getNewValue()));
+                handleCompleteRows((ArrayList<Integer>) theEvent.getNewValue());
         }
         repaint();
     }
