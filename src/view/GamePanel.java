@@ -105,7 +105,8 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
 
         addPropertyChangeListener(this);
 
-        myCurrentPiece = TetrisPiece.getRandomPiece();
+        //I'm 99% we don't want to do this
+        //myCurrentPiece = TetrisPiece.getRandomPiece();
     }
 
     @Override
