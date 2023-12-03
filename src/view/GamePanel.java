@@ -156,8 +156,6 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
         theG2D.fillRect(x + 1, y + 1, SQUARE_SIZE - 1, SQUARE_SIZE - 1);
     }
 
-
-    //we need to make sure that there's a different publisher from new piece panel right?
     @Override
     public void propertyChange(final PropertyChangeEvent theEvent) {
         switch (theEvent.getPropertyName()) {
