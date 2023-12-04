@@ -8,4 +8,4 @@
 #### - Khobaib Zafar : Worked on TetrisGUI requirements. Working on soft edges for pieces. 
 #### - Dalton Miltimore : Work on GamePanel (TetrisBoard) requirements. Working on music.
 
-[Google Docs Meeting Minutes](https://docs.google.com/document/d/1aWDug4Dk1qbsWcMLXQ9TkFP90STpNE5eqy6h8-YzMOg/edit?usp=sharing)
+[Google Docs Meeting Minutes](https://docs.google.com/document/d/1lL27XkiIrwfo9goU0bscvt742bIxOrm6vovCeK0SL-c/edit)
