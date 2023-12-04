@@ -29,15 +29,13 @@ public final class TetrisGUI implements PropertyChangeListener {
      */
     public static final BoardInterface BOARD = new Board();
 
-    /** Constanst used to size screen. */
+    /** Constant used to size screen. */
     public static final int SIZE = 800;
 
     /** Used to update step() the board after some time. */
     private static final Timer TIMER = new Timer(1000, theE -> BOARD.step());
 
-    /**
-     * Used for debugging, if value is ever greater than one, an exception is thrown.
-     */
+    /** Used for debugging to ensure no extra panels are instantiated. */
     private static int cnt;
 
     /** The Tetris Frame. */
@@ -80,6 +78,7 @@ public final class TetrisGUI implements PropertyChangeListener {
         }
         buildComponents();
         layoutComponents();
+        addListenersAndPropertyChangeListeners();
     }
 
     /**
@@ -125,7 +124,6 @@ public final class TetrisGUI implements PropertyChangeListener {
         myMainPanel.setLayout(new GridLayout(1, 0, 0, 0));
         myMainPanel.add(myGamePanel);
         myMainPanel.add(myRightPanel);
-        myWindow.addKeyListener(new MyKeyAdapter());
 
         //Window
         myWindow.setLayout(new GridLayout(1, 0, 0, 0));
@@ -137,7 +135,18 @@ public final class TetrisGUI implements PropertyChangeListener {
         myWindow.pack();
         myWindow.setVisible(true);
 
+    }
+
+    private void addListenersAndPropertyChangeListeners() {
+        myWindow.addKeyListener(new MyKeyAdapter());
         myMenuBar.addPropertyChangeListener(this);
+        BOARD.addPropertyChangeListener((PropertyChangeListener) myGamePanel);
+        BOARD.addPropertyChangeListener((PropertyChangeListener) myNextPiecePanel);
+    }
+
+    private void gameStart() {
+        TIMER.start();
+        BOARD.newGame();
     }
 
     @Override
@@ -147,36 +156,30 @@ public final class TetrisGUI implements PropertyChangeListener {
         }
     }
 
-    private void gameStart() {
-        TIMER.start();
-        BOARD.newGame();
-    }
-
-    private final class MyKeyAdapter extends KeyAdapter {
+    private static final class MyKeyAdapter extends KeyAdapter {
         @Override
-        public void keyReleased(final KeyEvent theE) {
+        public void keyPressed(final KeyEvent theE) {
             if (theE.getKeyCode() == KeyEvent.VK_A || theE.getKeyCode() == KeyEvent.VK_LEFT) {
                 BOARD.left();
-                myGamePanel.repaint();
+                TIMER.restart();
             } else if (theE.getKeyCode() == KeyEvent.VK_D
                        || theE.getKeyCode() == KeyEvent.VK_RIGHT) {
                 BOARD.right();
-                myGamePanel.repaint();
+                TIMER.restart();
             } else if (theE.getKeyCode() == KeyEvent.VK_S
                        || theE.getKeyCode() == KeyEvent.VK_DOWN) {
                 BOARD.down();
-                myGamePanel.repaint();
+                TIMER.restart();
             } else if (theE.getKeyCode() == KeyEvent.VK_SPACE) {
                 BOARD.drop();
-                myGamePanel.repaint();
+                TIMER.restart();
             } else if (theE.getKeyCode() == KeyEvent.VK_W
                        || theE.getKeyCode() == KeyEvent.VK_UP) {
                 BOARD.rotateCW();
-                myGamePanel.repaint();
+                TIMER.restart();
             }
         }
     }
-
 }
 
 

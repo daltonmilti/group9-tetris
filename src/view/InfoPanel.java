@@ -15,6 +15,7 @@ import javax.swing.JPanel;
  */
 public final class InfoPanel extends JPanel {
 
+    /** Used for debugging to ensure no extra panels are instantiated. */
     private static int cnt;
 
     /**

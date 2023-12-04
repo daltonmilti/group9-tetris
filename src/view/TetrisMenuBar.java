@@ -1,7 +1,5 @@
 package view;
 
-import model.BoardInterface;
-
 import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -9,6 +7,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import model.BoardInterface;
 
 /**
  * TetrisMenuBar Class.
@@ -16,15 +15,21 @@ import javax.swing.JOptionPane;
  * @author Christina
  * @version Autumn 2023
  */
-public class TetrisMenuBar extends JMenuBar {
+public class TetrisMenuBar extends JMenuBar implements TetrisMenuBarInterface {
 
-    /** */
+    /** Used for debugging to ensure no extra panels are instantiated. */
+    private static int cnt;
+
+    /** PropertyChangeSupport for all listeners */
     private PropertyChangeSupport myPcs;
-    /**
-     * Constructor.
-     */
+
+    /** Used to construct the JMenuBar for the TetrisGUI. */
     public TetrisMenuBar() {
         super();
+        if (cnt > 0) {
+            throw new IllegalStateException();
+        }
+        cnt++;
         createMenuBar();
     }
 

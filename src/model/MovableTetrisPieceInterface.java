@@ -1,7 +1,7 @@
 package model;
 
 /**
- * Provides a contract for the MoveableTetrisPiece class.
+ * Provides a contract for the MovableTetrisPiece class.
  *
  * @author braggs03
  * @author daltonmilti
@@ -47,7 +47,7 @@ public interface MovableTetrisPieceInterface {
     MovableTetrisPiece rotateCW();
 
     /**
-     * Rotates the TetrisPiece counter clockwise.
+     * Rotates the TetrisPiece counterclockwise.
      *
      * @return A new rotated movable TetrisPiece
      */

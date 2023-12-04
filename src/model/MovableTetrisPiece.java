@@ -39,7 +39,7 @@ public final class MovableTetrisPiece implements MovableTetrisPieceInterface {
     
     // This constructor allows creation of pieces in the zero rotational state
     /**
-     * Constructs a MovablTetrisPiece using the specified type and position;
+     * Constructs a MovableTetrisPiece using the specified type and position;
      * the initial rotation is set to the default zero (NONE) Rotation.
      * 
      * @param theTetrisPiece the type of TetrisPiece.
@@ -53,7 +53,8 @@ public final class MovableTetrisPiece implements MovableTetrisPieceInterface {
 
     // This constructor allows creation of pieces in any rotation
     /**
-     * Constructs a MovablTetrisPiece using the specified type, position, and initial rotation.
+     * Constructs a MovableTetrisPiece using the
+     * specified type, position, and initial rotation.
      * 
      * @param theTetrisPiece the type of TetrisPiece.
      * @param thePosition the position on the Board.
@@ -154,7 +155,7 @@ public final class MovableTetrisPiece implements MovableTetrisPieceInterface {
     }
 
     /**
-     * Rotates the TetrisPiece counter clockwise.
+     * Rotates the TetrisPiece counterclockwise.
      * 
      * @return A new rotated movable TetrisPiece
      */

@@ -7,7 +7,6 @@ import java.awt.Graphics2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.JPanel;
-
 import model.BoardInterface;
 import model.Point;
 import model.TetrisPiece;
@@ -23,21 +22,19 @@ import model.TetrisPiece;
  */
 public final class NextPiecePanel extends JPanel implements PropertyChangeListener {
 
-    /**
-     * Tracks the number of instances created for NextPiecePanel.
-     */
-    private static int count;
+    /** Used for debugging to ensure no extra panels are instantiated. */
+    private static int cnt;
 
     /**
      * Keeping the T piece in the middle.
-     * This is place holder value, will later be calculated
+     * This is placeholder value, will later be calculated
      * using a PropertyChangeListener and a simple algorithm.
      */
     private static final int X_OFFSET = 140;
 
     /**
      * Keeping the T piece in the middle.
-     * This is place holder value, will later be calculated
+     * This is placeholder value, will later be calculated
      * using a PropertyChangeListener and a simple algorithm.
      */
     private static final int Y_OFFSET = 120;
@@ -52,14 +49,13 @@ public final class NextPiecePanel extends JPanel implements PropertyChangeListen
      */
     public NextPiecePanel() {
         super();
-        if (count > 0) {
+        if (cnt > 0) {
             throw new IllegalStateException();
         }
-        count++;
+        cnt++;
         this.setPreferredSize(
              new Dimension(TetrisGUI.SIZE / 2, TetrisGUI.SIZE / 2));
         this.setBackground(Color.BLUE);
-        TetrisGUI.BOARD.addPropertyChangeListener(this);
     }
 
     @Override
@@ -73,11 +69,11 @@ public final class NextPiecePanel extends JPanel implements PropertyChangeListen
                 g2d.setPaint(Color.BLACK);
                 g2d.fillRect(k.x() * GamePanel.SQUARE_SIZE + X_OFFSET,
                         k.y() * GamePanel.SQUARE_SIZE + Y_OFFSET,
-                        GamePanel.SQUARE_SIZE, GamePanel.SQUARE_SIZE);
+                        GamePanel.SQUARE_SIZE + 1, GamePanel.SQUARE_SIZE + 1);
                 g2d.setPaint(Color.MAGENTA);
                 g2d.fillRect(k.x() * GamePanel.SQUARE_SIZE + X_OFFSET + 1,
                         k.y() * GamePanel.SQUARE_SIZE + Y_OFFSET + 1,
-                        GamePanel.SQUARE_SIZE - 2, GamePanel.SQUARE_SIZE - 2);
+                        GamePanel.SQUARE_SIZE - 1, GamePanel.SQUARE_SIZE - 1);
             }
         }
     }

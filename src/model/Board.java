@@ -15,7 +15,7 @@ import model.wallkicks.WallKick;
 
 /**
  * Represents a Tetris board. Board objects communicate with clients via Observer pattern. 
- * <p>Clients can expect Board objects to call norifyObservers with four different 
+ * <p>Clients can expect Board objects to call notifyObservers with four different
  * data types:</p>
  * <dl>
  * <dt>{@code List<Block[]>}</dt>
@@ -34,10 +34,11 @@ import model.wallkicks.WallKick;
  * @author Alan Fowler
  * @version 1.3
  */
+
 public class Board implements BoardInterface {
 
     // Class constants
-    /** Used for debugging */
+    /** Used for debugging to ensure no extra panels are instantiated. */
     private static int cnt;
 
     /**
@@ -74,12 +75,12 @@ public class Board implements BoardInterface {
     private boolean myGameOver;
 
     /**
-     * Contains a non random sequence of TetrisPieces to loop through.
+     * Contains a non-random sequence of TetrisPieces to loop through.
      */
     private List<TetrisPiece> myNonRandomPieces;
 
     /**
-     * The current index in the non random piece sequence.
+     * The current index in the non-random piece sequence.
      */
     private int mySequenceIndex;
     
@@ -182,9 +183,9 @@ public class Board implements BoardInterface {
     }
 
     /**
-     * Sets a non random sequence of pieces to loop through.
+     * Sets a non-random sequence of pieces to loop through.
      * 
-     * @param thePieces the List of non random TetrisPieces.
+     * @param thePieces the List of non-random TetrisPieces.
      */
     @Override
     public void setPieceSequence(final List<TetrisPiece> thePieces) {
@@ -520,7 +521,7 @@ public class Board implements BoardInterface {
     /**
      * Gets the next MovableTetrisPiece.
      * 
-     * @param theRestart Restart the non random cycle.
+     * @param theRestart Restart the non-random cycle.
      * @return A new MovableTetrisPiece.
      */
     private MovableTetrisPiece nextMovablePiece(final boolean theRestart) {
