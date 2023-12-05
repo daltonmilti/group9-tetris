@@ -1,14 +1,14 @@
 package view;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
-import javax.swing.*;
-import javax.swing.border.Border;
-
+import javax.swing.JPanel;
 import model.Block;
 import model.BoardInterface;
 import model.MovableTetrisPiece;
@@ -54,17 +54,6 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
      */
     private static final int RECTANGLE_HEIGHT = 50;
 
-    private int HEIGHT_COUNTER = 0;
-
-    private int WIDTH_COUNTER = 0;
-
-    /**
-     * All the colors the Tetris piece in order of TetrisPieces.values().
-     */
-    private static final Color[] PIECE_COLORS = {Color.CYAN, Color.ORANGE, Color.BLUE,
-            Color.MAGENTA, Color.GREEN,
-            Color.YELLOW, OTHER_RED};
-
     /**
      * The current piece.
      */
@@ -108,16 +97,12 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
             }
         }
         if (myFrozenBlocks != null) {
-            for (Block[] row: myFrozenBlocks) {
-                for (Block b: row) {
-                    paintBlock(b, g2d);
-                    WIDTH_COUNTER++;
+            for (int i = 0; i < myFrozenBlocks.size(); i++) {
+                for (int k = 0; k < myFrozenBlocks.get(0).length; k++) {
+                    paintBlock(myFrozenBlocks.get(i)[k], g2d, i, k);
                 }
-                HEIGHT_COUNTER++;
             }
         }
-
-
     }
 
     @Override
@@ -126,20 +111,21 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
             myCurrentPiece = (MovableTetrisPiece) theEvent.getNewValue();
             repaint();
         } else if (BoardInterface.FROZEN_CHANGING.equals(theEvent.getPropertyName())) {
-            myFrozenBlocks = (List<Block[]>) theEvent.getNewValue();
+            myFrozenBlocks = (LinkedList<Block[]>) theEvent.getNewValue();
             repaint();
         }
     }
 
-    private void paintBlock(final Block b, final Graphics2D g2d) {
-        if (b != null) {
-            g2d.setPaint(Color.BLACK);
-            g2d.fillRect(WIDTH_COUNTER * GamePanel.SQUARE_SIZE,
-                    (this.getHeight() - SQUARE_SIZE) - HEIGHT_COUNTER * GamePanel.SQUARE_SIZE,
+    private void paintBlock(final Block theBlock, final Graphics2D theG2d,
+                            final int theX, final int theY) {
+        if (theBlock != null) {
+            theG2d.setPaint(Color.BLACK);
+            theG2d.fillRect(theY * GamePanel.SQUARE_SIZE,
+                    (this.getHeight() - SQUARE_SIZE) - theX * GamePanel.SQUARE_SIZE,
                     GamePanel.SQUARE_SIZE + 1, GamePanel.SQUARE_SIZE + 1);
-            g2d.setPaint(TetrisPieceColors.getColor(b));
-            g2d.fillRect(WIDTH_COUNTER * GamePanel.SQUARE_SIZE + 1,
-                    (this.getHeight() - SQUARE_SIZE) - HEIGHT_COUNTER * GamePanel.SQUARE_SIZE + 1,
+            theG2d.setPaint(TetrisPieceColors.getColor(theBlock));
+            theG2d.fillRect(theY * GamePanel.SQUARE_SIZE + 1,
+                    (this.getHeight() - SQUARE_SIZE) - theX * GamePanel.SQUARE_SIZE + 1,
                     GamePanel.SQUARE_SIZE - 1, GamePanel.SQUARE_SIZE - 1);
 
         }

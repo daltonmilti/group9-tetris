@@ -560,6 +560,7 @@ public class Board implements BoardInterface {
         if (share && !myGameOver) {
             myPcs.firePropertyChange(NEXT_PIECE_CHANGE, null, myNextPiece);
         }
+
     }
 
     @Override
