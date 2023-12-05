@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import javax.swing.JPanel;
 import model.BoardInterface;
 import model.Point;
@@ -55,23 +56,34 @@ public final class NextPiecePanel extends JPanel implements PropertyChangeListen
         cnt++;
         this.setPreferredSize(
              new Dimension(TetrisGUI.SIZE / 2, TetrisGUI.SIZE / 2));
-        this.setBackground(Color.BLUE);
+        this.setBackground(Color.BLACK);
     }
 
     @Override
     protected void paintComponent(final Graphics theG) {
         super.paintComponent(theG);
         final Graphics2D g2d = (Graphics2D) theG;
-
+        final ArrayList<Point> point = new ArrayList<>();
+        for (int k = 0; k < 10; k++) {
+            point.add(new Point(k, 0));
+            point.add(new Point(k, 9));
+            point.add(new Point(0, k));
+            point.add(new Point(9, k));
+        }
+        for (final Point p : point) {
+            g2d.setPaint(Color.DARK_GRAY);
+            g2d.fillRect(p.x() * GamePanel.SQUARE_SIZE, p.y() * GamePanel.SQUARE_SIZE,
+                    GamePanel.SQUARE_SIZE + 1, GamePanel.SQUARE_SIZE + 1);
+            g2d.setPaint(Color.GRAY);
+            g2d.fillRect(p.x() * GamePanel.SQUARE_SIZE + 1,
+                    p.y() * GamePanel.SQUARE_SIZE + 1,
+                    GamePanel.SQUARE_SIZE - 1, GamePanel.SQUARE_SIZE - 1);
+        }
         if (myNextPiece != null) {
             final Point[] i = myNextPiece.getPoints();
             for (final Point k : i) {
-                g2d.setPaint(Color.BLACK);
-                g2d.fillRect(k.x() * GamePanel.SQUARE_SIZE + X_OFFSET,
-                        k.y() * GamePanel.SQUARE_SIZE + Y_OFFSET,
-                        GamePanel.SQUARE_SIZE + 1, GamePanel.SQUARE_SIZE + 1);
                 g2d.setPaint(Color.MAGENTA);
-                g2d.fillRect(k.x() * GamePanel.SQUARE_SIZE + X_OFFSET + 1,
+                g2d.fillRect(k.x() * GamePanel.SQUARE_SIZE + ((this.getWidth() / 2) - ((myNextPiece.getWidth() * GamePanel.SQUARE_SIZE) / 2)) + 1,
                         k.y() * GamePanel.SQUARE_SIZE + Y_OFFSET + 1,
                         GamePanel.SQUARE_SIZE - 1, GamePanel.SQUARE_SIZE - 1);
             }

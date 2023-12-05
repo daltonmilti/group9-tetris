@@ -8,6 +8,10 @@ import view.TetrisGUI;
  *
  * @author Charles Bryan (cfb3@uw.edu)
  * @author Alan Fowler (acfowler@uw.edu)
+ * @author braggs03
+ * @author daltonmilti
+ * @author KhobitheCode
+ * @author chriseetwo
  * @version Autumn 2023
  */
 public final class SandBox {

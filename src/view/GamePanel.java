@@ -72,11 +72,11 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
             for (final Point k : i) {
                 g2d.setPaint(Color.BLACK);
                 g2d.fillRect(k.x() * GamePanel.SQUARE_SIZE,
-                        (19 - k.y()) * GamePanel.SQUARE_SIZE,
+                        k.y() * GamePanel.SQUARE_SIZE,
                         GamePanel.SQUARE_SIZE + 1, GamePanel.SQUARE_SIZE + 1);
                 g2d.setPaint(Color.MAGENTA);
                 g2d.fillRect(k.x() * GamePanel.SQUARE_SIZE + 1,
-                        (19 - k.y()) * GamePanel.SQUARE_SIZE + 1,
+                        k.y() * GamePanel.SQUARE_SIZE + 1,
                         GamePanel.SQUARE_SIZE - 1, GamePanel.SQUARE_SIZE - 1);
             }
         }
