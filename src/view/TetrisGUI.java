@@ -149,6 +149,7 @@ public final class TetrisGUI implements PropertyChangeListener {
         myMenuBar.addPropertyChangeListener(this);
         BOARD.addPropertyChangeListener((PropertyChangeListener) myGamePanel);
         BOARD.addPropertyChangeListener((PropertyChangeListener) myNextPiecePanel);
+        BOARD.addPropertyChangeListener((PropertyChangeListener) myGamePanel);
     }
 
     private void gameStart() {

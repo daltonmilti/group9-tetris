@@ -29,6 +29,9 @@ public interface BoardInterface {
     /** Used to notify listeners the game is starting. */
     String GAME_STARTING = "New Game is Starting";
 
+    /** Used to notify listeners the game has a new piece added to FrozenPieces. */
+    String FROZEN_CHANGING = "Frozen Blocks Have Changed";
+
     /**
      * Get the width of the board.
      *

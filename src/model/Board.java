@@ -228,6 +228,7 @@ public class Board implements BoardInterface {
                 myCurrentPiece = nextMovablePiece(false);
             }
             myPcs.firePropertyChange(CURRENT_PIECE_CHANGING, null, myCurrentPiece);
+            myPcs.firePropertyChange(FROZEN_CHANGING, null, myFrozenBlocks);
         }
     }
 
@@ -438,6 +439,7 @@ public class Board implements BoardInterface {
                 myFrozenBlocks.remove(row);
                 myFrozenBlocks.add(new Block[myWidth]);
             }
+            myPcs.firePropertyChange(FROZEN_CHANGING, null, myFrozenBlocks);
         }
     }
     

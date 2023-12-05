@@ -1,6 +1,8 @@
 package view;
 
 import java.awt.Color;
+
+import model.Block;
 import model.MovableTetrisPiece;
 import model.TetrisPiece;
 
@@ -25,6 +27,19 @@ public final class TetrisPieceColors {
      */
     public static Color getColor(final TetrisPiece thePiece) {
         return switch (thePiece) {
+            case I -> Color.CYAN;
+            case J -> Color.BLUE;
+            case L -> Color.ORANGE;
+            case O -> Color.YELLOW;
+            case S -> Color.GREEN;
+            case T -> Color.MAGENTA;
+            case Z -> Color.RED;
+        };
+    }
+
+    public static Color getColor(final Block block) {
+        return switch (block) {
+            case EMPTY -> Color.BLACK;
             case I -> Color.CYAN;
             case J -> Color.BLUE;
             case L -> Color.ORANGE;
