@@ -12,6 +12,13 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 import model.Board;
 import model.BoardInterface;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import java.io.IOException;
+import java.net.URL;
 
 /**
  * Creates a Tetris GUI.
@@ -147,6 +154,7 @@ public final class TetrisGUI implements PropertyChangeListener {
     private void gameStart() {
         TIMER.start();
         BOARD.newGame();
+        playMusic("src/assets/sound/tetris.wav");
     }
 
     @Override
@@ -175,6 +183,34 @@ public final class TetrisGUI implements PropertyChangeListener {
                 BOARD.rotateCW();
             }
         }
+    }
+
+    /**
+     * for playing music
+     * @param theFilePath
+     */
+    private void playMusic(final String theFilePath) {
+
+        //debugging
+        final URL url = this.getClass().getResource(theFilePath);
+        if (url == null) {
+            System.out.println("Resource not found: " + theFilePath);
+        } else {
+            System.out.println("Resource found: " + url.toExternalForm());
+        }
+        System.out.println("music should play");
+
+
+//        try {
+//            final URL url = this.getClass().getResource(theFilePath);
+//            final AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
+//            final Clip clip = AudioSystem.getClip();
+//            clip.open(audioIn);
+//            clip.start();
+//            clip.loop(Clip.LOOP_CONTINUOUSLY); // Loop the music continuously.
+//        } catch (final UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+//            e.printStackTrace();
+//        }
     }
 }
 
