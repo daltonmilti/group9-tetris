@@ -51,6 +51,9 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
     /** The current piece. */
     private MovableTetrisPiece myCurrentPiece;
 
+    /** The Game Over Panel */
+    private JPanel myGameOverPanel;
+
     /** Creates the Tetris game panel for the TetrisGUI. */
     public GamePanel() {
         super();
@@ -58,9 +61,13 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
             throw new IllegalStateException();
         }
         cnt++;
+
+
         this.setPreferredSize(new Dimension(TetrisGUI.SIZE / 2, TetrisGUI.SIZE));
         this.setBackground(Color.RED);
     }
+
+
 
     @Override
     protected void paintComponent(final Graphics theG) {
@@ -80,6 +87,15 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
                         GamePanel.SQUARE_SIZE - 1, GamePanel.SQUARE_SIZE - 1);
             }
         }
+    }
+
+    private void makeGameOverScreen() {
+        myGameOverPanel.setVisible(true);
+
+    }
+
+    private void removeGameOverScreen() {
+        myGameOverPanel.setVisible(false);
     }
 
     @Override

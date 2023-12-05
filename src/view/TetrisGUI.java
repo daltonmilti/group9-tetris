@@ -78,6 +78,11 @@ public final class TetrisGUI implements PropertyChangeListener {
      */
     private JPanel myInfoPanel;
 
+    /**
+     * The Game Over Panel.
+     */
+    private JPanel myGameOverPanel;
+
     private TetrisGUI() {
         super();
         if (cnt > 0) {
@@ -116,6 +121,9 @@ public final class TetrisGUI implements PropertyChangeListener {
         //InfoPanel
         myInfoPanel = new InfoPanel();
 
+        //GameOverPanel
+        myGameOverPanel = new GameOverPanel();
+
     }
     private void layoutComponents() {
 
@@ -131,6 +139,9 @@ public final class TetrisGUI implements PropertyChangeListener {
         myMainPanel.setLayout(new GridLayout(1, 0, 0, 0));
         myMainPanel.add(myGamePanel);
         myMainPanel.add(myRightPanel);
+
+        //
+        myGamePanel.add(myGameOverPanel);
 
         //Window
         myWindow.setLayout(new GridLayout(1, 0, 0, 0));
@@ -149,6 +160,8 @@ public final class TetrisGUI implements PropertyChangeListener {
         myMenuBar.addPropertyChangeListener(this);
         BOARD.addPropertyChangeListener((PropertyChangeListener) myGamePanel);
         BOARD.addPropertyChangeListener((PropertyChangeListener) myNextPiecePanel);
+        myMenuBar.addPropertyChangeListener((PropertyChangeListener) myGamePanel);
+        myGameOverPanel.addPropertyChangeListener(this);
     }
 
     private void gameStart() {
@@ -161,6 +174,12 @@ public final class TetrisGUI implements PropertyChangeListener {
     public void propertyChange(final PropertyChangeEvent theEvt) {
         if (BoardInterface.GAME_STARTING.equals(theEvt.getPropertyName())) {
             gameStart();
+        } else if (BoardInterface.GAME_END.equals(theEvt.getPropertyName())) {
+            makeGameOverScreen();
+            myGamePanel.revalidate();
+        } else if (BoardInterface.GAME_STARTING.equals(theEvt.getPropertyName())) {
+            removeGameOverScreen();
+            myGamePanel.revalidate();
         }
     }
 
@@ -200,6 +219,15 @@ public final class TetrisGUI implements PropertyChangeListener {
         } catch (final UnsupportedAudioFileException | IOException | LineUnavailableException e) {
             e.printStackTrace();
         }
+    }
+
+    private void makeGameOverScreen() {
+        myGameOverPanel.setVisible(true);
+
+    }
+
+    private void removeGameOverScreen() {
+        myGameOverPanel.setVisible(false);
     }
 }
 
