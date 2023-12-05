@@ -34,13 +34,13 @@ public class TetrisMenuBar extends JMenuBar implements TetrisMenuBarInterface {
     }
 
     private void createMenuBar() {
-        final JMenu menu = menuBuilder();
+        final JMenuBar menu = menuBuilder();
         this.add(menu);
         myPcs = new PropertyChangeSupport(this);
     }
 
 
-    private JMenu menuBuilder() {
+    private JMenuBar menuBuilder() {
         final JMenuBar menuBar = new JMenuBar();
         final JMenu menu = new JMenu("File");
 
@@ -54,7 +54,8 @@ public class TetrisMenuBar extends JMenuBar implements TetrisMenuBarInterface {
         exitItem.addActionListener(theE -> System.exit(0));
         menu.add(exitItem);
 
-        final JMenuItem aboutItem = new JMenuItem("About");
+        final JMenu about = new JMenu("About");
+        final JMenuItem aboutItem = new JMenuItem("Group Members");
         aboutItem.addActionListener(theE -> JOptionPane.
                 showMessageDialog(this, """
                         Group Members:
@@ -62,9 +63,12 @@ public class TetrisMenuBar extends JMenuBar implements TetrisMenuBarInterface {
                         Christina Situ
                         Dalton Miltimore
                         Khobaib Zafar"""));
-        menu.add(aboutItem);
+        about.add(aboutItem);
 
-        return menu;
+        menuBar.add(menu);
+        menuBar.add(about);
+
+        return menuBar;
     }
     @Override
     public void addPropertyChangeListener(final PropertyChangeListener theListener) {

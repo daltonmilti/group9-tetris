@@ -161,22 +161,18 @@ public final class TetrisGUI implements PropertyChangeListener {
         public void keyPressed(final KeyEvent theE) {
             if (theE.getKeyCode() == KeyEvent.VK_A || theE.getKeyCode() == KeyEvent.VK_LEFT) {
                 BOARD.left();
-                TIMER.restart();
             } else if (theE.getKeyCode() == KeyEvent.VK_D
                        || theE.getKeyCode() == KeyEvent.VK_RIGHT) {
                 BOARD.right();
-                TIMER.restart();
             } else if (theE.getKeyCode() == KeyEvent.VK_S
                        || theE.getKeyCode() == KeyEvent.VK_DOWN) {
                 BOARD.down();
-                TIMER.restart();
             } else if (theE.getKeyCode() == KeyEvent.VK_SPACE) {
                 BOARD.drop();
                 TIMER.restart();
             } else if (theE.getKeyCode() == KeyEvent.VK_W
                        || theE.getKeyCode() == KeyEvent.VK_UP) {
                 BOARD.rotateCW();
-                TIMER.restart();
             }
         }
     }
