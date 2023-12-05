@@ -74,7 +74,7 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
                 g2d.fillRect(k.x() * GamePanel.SQUARE_SIZE,
                         (this.getHeight() - SQUARE_SIZE) - k.y() * GamePanel.SQUARE_SIZE,
                         GamePanel.SQUARE_SIZE + 1, GamePanel.SQUARE_SIZE + 1);
-                g2d.setPaint(Color.MAGENTA);
+                g2d.setPaint(TetrisPieceColors.getColor(myCurrentPiece));
                 g2d.fillRect(k.x() * GamePanel.SQUARE_SIZE + 1,
                         (this.getHeight() - SQUARE_SIZE) - k.y() * GamePanel.SQUARE_SIZE + 1,
                         GamePanel.SQUARE_SIZE - 1, GamePanel.SQUARE_SIZE - 1);
