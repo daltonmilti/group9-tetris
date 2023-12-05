@@ -154,7 +154,7 @@ public final class TetrisGUI implements PropertyChangeListener {
     private void gameStart() {
         TIMER.start();
         BOARD.newGame();
-        playMusic("src/assets/sound/tetris.wav");
+        playMusic("/assets/sound/tetris.wav");
     }
 
     @Override
@@ -187,30 +187,19 @@ public final class TetrisGUI implements PropertyChangeListener {
 
     /**
      * for playing music
-     * @param theFilePath
+     * @param theFilePath path to tetris.wav in assets.sound
      */
     private void playMusic(final String theFilePath) {
-
-        //debugging
-        final URL url = this.getClass().getResource(theFilePath);
-        if (url == null) {
-            System.out.println("Resource not found: " + theFilePath);
-        } else {
-            System.out.println("Resource found: " + url.toExternalForm());
+        try {
+            final URL url = this.getClass().getResource(theFilePath);
+            final AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
+            final Clip clip = AudioSystem.getClip();
+            clip.open(audioIn);
+            clip.start();
+            clip.loop(Clip.LOOP_CONTINUOUSLY); // Loop the music continuously.
+        } catch (final UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+            e.printStackTrace();
         }
-        System.out.println("music should play");
-
-
-//        try {
-//            final URL url = this.getClass().getResource(theFilePath);
-//            final AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
-//            final Clip clip = AudioSystem.getClip();
-//            clip.open(audioIn);
-//            clip.start();
-//            clip.loop(Clip.LOOP_CONTINUOUSLY); // Loop the music continuously.
-//        } catch (final UnsupportedAudioFileException | IOException | LineUnavailableException e) {
-//            e.printStackTrace();
-//        }
     }
 }
 
