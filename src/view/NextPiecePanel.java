@@ -83,9 +83,16 @@ public final class NextPiecePanel extends JPanel implements PropertyChangeListen
             final Point[] i = myNextPiece.getPoints();
             for (final Point k : i) {
                 g2d.setPaint(TetrisPieceColors.getColor(myNextPiece));
-                g2d.fillRect(k.x() * GamePanel.SQUARE_SIZE + X_OFFSET + 1,
-                        k.y() * GamePanel.SQUARE_SIZE + Y_OFFSET + 1,
-                        GamePanel.SQUARE_SIZE - 1, GamePanel.SQUARE_SIZE - 1);
+
+                if (myNextPiece == TetrisPiece.I || myNextPiece == TetrisPiece.O) {
+                    g2d.fillRect(k.x() * GamePanel.SQUARE_SIZE + (getWidth() - 4 * GamePanel.SQUARE_SIZE) / 2,
+                            k.y() * GamePanel.SQUARE_SIZE + (getHeight() - 4 * GamePanel.SQUARE_SIZE) / 2,
+                            GamePanel.SQUARE_SIZE - 1, GamePanel.SQUARE_SIZE - 1);
+                } else {
+                    g2d.fillRect(k.x() * GamePanel.SQUARE_SIZE + X_OFFSET + 1,
+                            k.y() * GamePanel.SQUARE_SIZE + Y_OFFSET + 1,
+                            GamePanel.SQUARE_SIZE - 1, GamePanel.SQUARE_SIZE - 1);
+                }
             }
         }
     }
