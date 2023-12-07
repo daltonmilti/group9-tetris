@@ -37,10 +37,6 @@ import model.wallkicks.WallKick;
 
 public class Board implements BoardInterface {
 
-    // Class constants
-    /** Used for debugging to ensure no extra panels are instantiated. */
-    private static int cnt;
-
     /**
      * Default width of a Tetris game board.
      */
@@ -122,10 +118,6 @@ public class Board implements BoardInterface {
      */
     public Board(final int theWidth, final int theHeight) {
         super();
-        if (cnt > 0) {
-            throw new IllegalStateException();
-        }
-        cnt++;
         myWidth = theWidth;
         myHeight = theHeight;
         myFrozenBlocks = new LinkedList<>();
@@ -429,9 +421,9 @@ public class Board implements BoardInterface {
             }
             if (complete) {
                 completeRows.add(myFrozenBlocks.indexOf(row));
-                myPcs.firePropertyChange(ROW_CHANGE, null, completeRows.size());
             }
         }
+        myPcs.firePropertyChange(ROW_CHANGE, null, completeRows.size());
         // loop through list backwards removing items by index
         if (!completeRows.isEmpty()) {
             for (int i = completeRows.size() - 1; i >= 0; i--) {

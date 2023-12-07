@@ -32,6 +32,9 @@ public interface BoardInterface {
     /** Used to notify listeners the game has a new piece added to FrozenPieces. */
     String FROZEN_CHANGING = "Frozen Blocks Have Changed";
 
+    /** Used to notify listeners the level is changing. */
+    String LEVEL_CHANGING = "Level is changing";
+
     /**
      * Get the width of the board.
      *
