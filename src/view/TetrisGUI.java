@@ -216,6 +216,7 @@ public final class TetrisGUI implements PropertyChangeListener {
             myKeys.put(KeyEvent.VK_D, BOARD::right);
             myKeys.put(KeyEvent.VK_SPACE, BOARD::drop);
         }
+
         @Override
         public void keyPressed(final KeyEvent theE) {
             if (TetrisGUI.this.myGameStarted && myKeys.containsKey(theE.getKeyCode())) {

@@ -32,6 +32,11 @@ public final class InfoPanel extends JPanel implements PropertyChangeListener {
     private static final String LEVEL_LABEL = "Current Level: ";
 
     /**
+     * Text constant for the rows cleared.
+     */
+    private static final String ROWS_LABEL = "Rows Cleared: ";
+
+    /**
      * Font size for labels.
      */
     private static final int FONT_SIZE = 30;
@@ -87,6 +92,11 @@ public final class InfoPanel extends JPanel implements PropertyChangeListener {
      */
     private JLabel myLevelText;
 
+    /**
+     * Label for the rows cleared.
+     */
+    private JLabel myRowText;
+
     /** PropertyChangeSupport for all listeners */
     private final PropertyChangeSupport myPcs;
 
@@ -113,6 +123,10 @@ public final class InfoPanel extends JPanel implements PropertyChangeListener {
         myLevelText.setFont(new Font("", Font.BOLD, FONT_SIZE));
         myLevelText.setText(LEVEL_LABEL + myLevel);
         this.add(myLevelText);
+        myRowText = new JLabel();
+        myRowText.setFont(new Font("", Font.BOLD, FONT_SIZE));
+        myRowText.setText(ROWS_LABEL + myClearedRows);
+        this.add(myRowText);
     }
 
     private void display(final int theRowsCleared) {
@@ -125,7 +139,7 @@ public final class InfoPanel extends JPanel implements PropertyChangeListener {
         myScore += calculateScore(theRowsCleared);
         myScoreText.setText(SCORE_LABEL + myScore);
         myLevelText.setText(LEVEL_LABEL + myLevel);
-        myScoreText.revalidate();
+        myRowText.setText(ROWS_LABEL + myClearedRows);
     }
 
     private int calculateScore(final int theRowsCleared) {

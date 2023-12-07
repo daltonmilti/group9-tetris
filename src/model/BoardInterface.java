@@ -35,6 +35,9 @@ public interface BoardInterface {
     /** Used to notify listeners the level is changing. */
     String LEVEL_CHANGING = "Level is changing";
 
+    /** Used to notify listeners the game is paused. */
+    String GAME_PAUSED = "The game is paused";
+
     /**
      * Get the width of the board.
      *
