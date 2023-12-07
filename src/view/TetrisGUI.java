@@ -87,6 +87,11 @@ public final class TetrisGUI implements PropertyChangeListener {
      */
     private boolean myGameStarted;
 
+    /**
+     * Clip for playing music.
+     */
+    private Clip myClip;
+
     private TetrisGUI() {
         super();
         myGameStarted = false;
@@ -165,7 +170,7 @@ public final class TetrisGUI implements PropertyChangeListener {
     private void gameStart() {
         TIMER.start();
         BOARD.newGame();
-        playMusic("/assets/sound/tetris.wav");
+        playMusic("/tetris.wav");
         myGameStarted = true;
     }
 
@@ -175,6 +180,7 @@ public final class TetrisGUI implements PropertyChangeListener {
             gameStart();
         } else if (BoardInterface.GAME_END.equals(theEvt.getPropertyName())) {
             myGameStarted = false;
+            stopMusic();
         } else if (BoardInterface.LEVEL_CHANGING.equals(theEvt.getPropertyName())) {
             TIMER.setDelay((int) (BASE_SPEED / Math.log((int) theEvt.getNewValue() + 1)));
         }
@@ -188,13 +194,19 @@ public final class TetrisGUI implements PropertyChangeListener {
         try {
             final URL url = Objects.requireNonNull(this.getClass().getResource(theFilePath));
             final AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
-            final Clip clip = AudioSystem.getClip();
-            clip.open(audioIn);
-            clip.start();
-            clip.loop(Clip.LOOP_CONTINUOUSLY); // Loop the music continuously.
+            myClip = AudioSystem.getClip(); // Initialize the class member variable
+            myClip.open(audioIn);
+            myClip.start();
+            myClip.loop(Clip.LOOP_CONTINUOUSLY); // Loop the music continuously.
         } catch (final UnsupportedAudioFileException | IOException
-                 | LineUnavailableException e) {
+                       | LineUnavailableException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void stopMusic() {
+        if (myClip != null) {
+            myClip.stop(); // Stop the music
         }
     }
 
