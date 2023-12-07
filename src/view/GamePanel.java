@@ -50,11 +50,6 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
     private MovableTetrisPiece myCurrentPiece;
 
     /**
-     * The ghost piece.
-     */
-    private MovableTetrisPiece myGhostPiece;
-
-    /**
     * The frozen blocks on the board.
      */
     private List<Block[]> myFrozenBlocks;
@@ -70,7 +65,7 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
     public GamePanel() {
         super();
         this.setPreferredSize(new Dimension(TetrisGUI.SIZE / 2, TetrisGUI.SIZE));
-        this.setBackground(Color.BLACK);
+        this.setBackground(Color.RED);
 
     }
 
@@ -92,21 +87,6 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
                         GamePanel.SQUARE_SIZE - 1, GamePanel.SQUARE_SIZE - 1);
             }
         }
-
-        if (myGhostPiece != null) {
-            final Point[] p = myGhostPiece.getBoardPoints();
-            for (final Point k : p) {
-                g2d.setPaint(Color.LIGHT_GRAY);
-                g2d.fillRect(k.x() * GamePanel.SQUARE_SIZE,
-                        (this.getHeight() - SQUARE_SIZE) - k.y() * GamePanel.SQUARE_SIZE,
-                        GamePanel.SQUARE_SIZE + 1, GamePanel.SQUARE_SIZE + 1);
-                g2d.setPaint(Color.BLACK);
-                g2d.fillRect(k.x() * GamePanel.SQUARE_SIZE + 1,
-                        (this.getHeight() - SQUARE_SIZE) - k.y() * GamePanel.SQUARE_SIZE + 1,
-                        GamePanel.SQUARE_SIZE - 1, GamePanel.SQUARE_SIZE - 1);
-            }
-        }
-
         if (myFrozenBlocks != null) {
             for (int i = 0; i < myFrozenBlocks.size(); i++) {
                 for (int k = 0; k < myFrozenBlocks.get(0).length; k++) {
@@ -116,8 +96,6 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
         }
         if (myGamePaused) {
             g2d.setPaint(Color.BLACK);
-            g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
-            g2d.setPaint(Color.WHITE);
             g2d.setFont(new Font("TimesRoman", Font.PLAIN, 60));
             g2d.drawString("PAUSED", 85, 415);
         }
@@ -131,6 +109,9 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
             repaint();
         } else if (BoardInterface.FROZEN_CHANGING.equals(theEvent.getPropertyName())) {
             myFrozenBlocks = (LinkedList<Block[]>) theEvent.getNewValue();
+            repaint();
+        } else if (BoardInterface.GAME_PAUSED.equals(theEvent.getPropertyName())) {
+            myGamePaused = (boolean) theEvent.getNewValue();
             repaint();
         }
     }
