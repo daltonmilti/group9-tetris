@@ -1,17 +1,12 @@
 package view;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.LinkedList;
 import java.util.List;
 import javax.swing.JPanel;
-import model.Block;
-import model.BoardInterface;
-import model.MovableTetrisPiece;
+import model.*;
 import model.Point;
 
 /**
@@ -65,6 +60,11 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
     private List<Block[]> myFrozenBlocks;
 
     /**
+     * Whether or not the game is paused.
+     */
+    private boolean myGamePaused;
+
+    /**
      * Creates the Tetris game panel for the TetrisGUI.
      */
     public GamePanel() {
@@ -114,6 +114,13 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
                 }
             }
         }
+        if (myGamePaused) {
+            g2d.setPaint(Color.BLACK);
+            g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
+            g2d.setPaint(Color.WHITE);
+            g2d.setFont(new Font("TimesRoman", Font.PLAIN, 60));
+            g2d.drawString("PAUSED", 85, 415);
+        }
     }
 
     @Override
@@ -124,9 +131,6 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
             repaint();
         } else if (BoardInterface.FROZEN_CHANGING.equals(theEvent.getPropertyName())) {
             myFrozenBlocks = (LinkedList<Block[]>) theEvent.getNewValue();
-            repaint();
-        } else if (BoardInterface.GHOST_PIECE_CHANGING.equals(theEvent.getPropertyName())) {
-            myGhostPiece = (MovableTetrisPiece) theEvent.getNewValue();
             repaint();
         }
     }

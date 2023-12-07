@@ -83,19 +83,9 @@ public final class TetrisGUI implements PropertyChangeListener {
     private JPanel myInfoPanel;
 
     /**
-     * The Game over panel.
-     */
-    private JPanel myGameOverPanel;
-
-    /**
      * Whether or not the board
      */
     private boolean myGameStarted;
-
-    /**
-     * Clip for playing music.
-     */
-    private Clip myClip;
 
     private TetrisGUI() {
         super();
@@ -133,9 +123,6 @@ public final class TetrisGUI implements PropertyChangeListener {
         //InfoPanel
         myInfoPanel = new InfoPanel();
 
-        //GameOverPanel
-        myGameOverPanel = new GameOverPanel();
-
     }
     private void layoutComponents() {
 
@@ -151,9 +138,6 @@ public final class TetrisGUI implements PropertyChangeListener {
         myMainPanel.setLayout(new GridLayout(1, 0, 0, 0));
         myMainPanel.add(myGamePanel);
         myMainPanel.add(myRightPanel);
-
-        //Game Panel
-        myGamePanel.add(myGameOverPanel);
 
         //Window
         myWindow.setLayout(new GridLayout(1, 0, 0, 0));
@@ -181,7 +165,7 @@ public final class TetrisGUI implements PropertyChangeListener {
     private void gameStart() {
         TIMER.start();
         BOARD.newGame();
-        playMusic("/tetris.wav");
+        playMusic("/assets/sound/tetris.wav");
         myGameStarted = true;
     }
 
@@ -189,11 +173,8 @@ public final class TetrisGUI implements PropertyChangeListener {
     public void propertyChange(final PropertyChangeEvent theEvt) {
         if (BoardInterface.GAME_STARTING.equals(theEvt.getPropertyName())) {
             gameStart();
-            removeGameOverPanel();
         } else if (BoardInterface.GAME_END.equals(theEvt.getPropertyName())) {
             myGameStarted = false;
-            stopMusic();
-            showGameOverPanel();
         } else if (BoardInterface.LEVEL_CHANGING.equals(theEvt.getPropertyName())) {
             TIMER.setDelay((int) (BASE_SPEED / Math.log((int) theEvt.getNewValue() + 1)));
         }
@@ -207,27 +188,14 @@ public final class TetrisGUI implements PropertyChangeListener {
         try {
             final URL url = Objects.requireNonNull(this.getClass().getResource(theFilePath));
             final AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
-            myClip = AudioSystem.getClip(); // Initialize the class member variable
-            myClip.open(audioIn);
-            myClip.start();
-            myClip.loop(Clip.LOOP_CONTINUOUSLY); // Loop the music continuously.
+            final Clip clip = AudioSystem.getClip();
+            clip.open(audioIn);
+            clip.start();
+            clip.loop(Clip.LOOP_CONTINUOUSLY); // Loop the music continuously.
         } catch (final UnsupportedAudioFileException | IOException
-                       | LineUnavailableException e) {
+                 | LineUnavailableException e) {
             e.printStackTrace();
         }
-    }
-
-    private void stopMusic() {
-        if (myClip != null) {
-            myClip.stop(); // Stop the music
-        }
-    }
-
-    private void showGameOverPanel() {
-        myGameOverPanel.setVisible(true);
-    }
-    private void removeGameOverPanel() {
-        myGameOverPanel.setVisible(false);
     }
 
     private final class MyKeyAdapter extends KeyAdapter {
