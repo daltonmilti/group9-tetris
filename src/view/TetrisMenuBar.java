@@ -11,8 +11,10 @@ import model.BoardInterface;
 
 /**
  * TetrisMenuBar Class.
- *
- * @author Christina
+ * @author braggs03
+ * @author daltonmilti
+ * @author KhobitheCode
+ * @author chriseetwo
  * @version Autumn 2023
  */
 public class TetrisMenuBar extends JMenuBar implements PropertyChangeMethods {
