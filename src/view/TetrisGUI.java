@@ -83,6 +83,11 @@ public final class TetrisGUI implements PropertyChangeListener {
     private JPanel myInfoPanel;
 
     /**
+     * The Game over panel.
+     */
+    private JPanel myGameOverPanel;
+
+    /**
      * Whether or not the board
      */
     private boolean myGameStarted;
@@ -128,6 +133,9 @@ public final class TetrisGUI implements PropertyChangeListener {
         //InfoPanel
         myInfoPanel = new InfoPanel();
 
+        //GameOverPanel
+        myGameOverPanel = new GameOverPanel();
+
     }
     private void layoutComponents() {
 
@@ -143,6 +151,9 @@ public final class TetrisGUI implements PropertyChangeListener {
         myMainPanel.setLayout(new GridLayout(1, 0, 0, 0));
         myMainPanel.add(myGamePanel);
         myMainPanel.add(myRightPanel);
+
+        //Game Panel
+        myGamePanel.add(myGameOverPanel);
 
         //Window
         myWindow.setLayout(new GridLayout(1, 0, 0, 0));
@@ -178,9 +189,11 @@ public final class TetrisGUI implements PropertyChangeListener {
     public void propertyChange(final PropertyChangeEvent theEvt) {
         if (BoardInterface.GAME_STARTING.equals(theEvt.getPropertyName())) {
             gameStart();
+            removeGameOverPanel();
         } else if (BoardInterface.GAME_END.equals(theEvt.getPropertyName())) {
             myGameStarted = false;
             stopMusic();
+            showGameOverPanel();
         } else if (BoardInterface.LEVEL_CHANGING.equals(theEvt.getPropertyName())) {
             TIMER.setDelay((int) (BASE_SPEED / Math.log((int) theEvt.getNewValue() + 1)));
         }
@@ -208,6 +221,13 @@ public final class TetrisGUI implements PropertyChangeListener {
         if (myClip != null) {
             myClip.stop(); // Stop the music
         }
+    }
+
+    private void showGameOverPanel() {
+        myGameOverPanel.setVisible(true);
+    }
+    private void removeGameOverPanel() {
+        myGameOverPanel.setVisible(false);
     }
 
     private final class MyKeyAdapter extends KeyAdapter {
