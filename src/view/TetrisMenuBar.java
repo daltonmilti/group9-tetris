@@ -15,7 +15,7 @@ import model.BoardInterface;
  * @author Christina
  * @version Autumn 2023
  */
-public class TetrisMenuBar extends JMenuBar implements TetrisMenuBarInterface {
+public class TetrisMenuBar extends JMenuBar implements PropertyChangeMethods {
 
     /** PropertyChangeSupport for all listeners */
     private PropertyChangeSupport myPcs;
@@ -57,6 +57,17 @@ public class TetrisMenuBar extends JMenuBar implements TetrisMenuBarInterface {
                         Dalton Miltimore
                         Khobaib Zafar"""));
         about.add(aboutItem);
+        final JMenuItem scoringItem = new JMenuItem("Scoring Rules");
+        scoringItem.addActionListener(theE -> JOptionPane.
+                showMessageDialog(this, """
+                        Score is calculated as follows:
+                        When line(s) are cleared, the score gained is the current
+                        level, n, times a multiplyer based on the lines cleared.
+                        
+                        1 line      2 line      3 line       4 line
+                        n * 40    n * 100    n * 300    n * 1200
+                        """));
+        about.add(scoringItem);
 
         menuBar.add(menu);
         menuBar.add(about);

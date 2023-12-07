@@ -11,7 +11,7 @@ import java.beans.PropertyChangeListener;
  * @author chriseetwo
  * @version Autumn 2023
  */
-public interface TetrisMenuBarInterface {
+public interface PropertyChangeMethods {
 
     /**
      * Used for adding a PropertyChangeListener. This listener is registered to all properties.
