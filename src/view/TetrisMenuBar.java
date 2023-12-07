@@ -11,14 +11,13 @@ import model.BoardInterface;
 
 /**
  * TetrisMenuBar Class.
- *
- * @author Christina
+ * @author braggs03
+ * @author daltonmilti
+ * @author KhobitheCode
+ * @author chriseetwo
  * @version Autumn 2023
  */
 public class TetrisMenuBar extends JMenuBar implements TetrisMenuBarInterface {
-
-    /** Used for debugging to ensure no extra panels are instantiated. */
-    private static int cnt;
 
     /** PropertyChangeSupport for all listeners */
     private PropertyChangeSupport myPcs;
@@ -26,10 +25,6 @@ public class TetrisMenuBar extends JMenuBar implements TetrisMenuBarInterface {
     /** Used to construct the JMenuBar for the TetrisGUI. */
     public TetrisMenuBar() {
         super();
-        if (cnt > 0) {
-            throw new IllegalStateException();
-        }
-        cnt++;
         createMenuBar();
     }
 

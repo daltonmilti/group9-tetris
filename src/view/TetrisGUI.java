@@ -6,19 +6,21 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Objects;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 import model.Board;
 import model.BoardInterface;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
-import java.io.IOException;
-import java.net.URL;
 
 /**
  * Creates a Tetris GUI.
@@ -39,11 +41,13 @@ public final class TetrisGUI implements PropertyChangeListener {
     /** Constant used to size screen. */
     public static final int SIZE = 800;
 
-    /** Used to update step() the board after some time. */
-    private static final Timer TIMER = new Timer(1000, theE -> BOARD.step());
+    /**
+     * Base delay on timer.
+     */
+    private static final int BASE_SPEED = 1000;
 
-    /** Used for debugging to ensure no extra panels are instantiated. */
-    private static int cnt;
+    /** Used to update step() the board after some time. */
+    private static final Timer TIMER = new Timer(BASE_SPEED, theE -> BOARD.step());
 
     /** The Tetris Frame. */
     private JFrame myWindow;
@@ -79,15 +83,13 @@ public final class TetrisGUI implements PropertyChangeListener {
     private JPanel myInfoPanel;
 
     /**
-     * The Game Over Panel.
+     * Whether or not the board
      */
-    private JPanel myGameOverPanel;
+    private boolean myGameStarted;
 
     private TetrisGUI() {
         super();
-        if (cnt > 0) {
-            throw new IllegalStateException();
-        }
+        myGameStarted = false;
         buildComponents();
         layoutComponents();
         addListenersAndPropertyChangeListeners();
@@ -121,9 +123,6 @@ public final class TetrisGUI implements PropertyChangeListener {
         //InfoPanel
         myInfoPanel = new InfoPanel();
 
-        //GameOverPanel
-        myGameOverPanel = new GameOverPanel();
-
     }
     private void layoutComponents() {
 
@@ -140,9 +139,6 @@ public final class TetrisGUI implements PropertyChangeListener {
         myMainPanel.add(myGamePanel);
         myMainPanel.add(myRightPanel);
 
-        //
-        myGamePanel.add(myGameOverPanel);
-
         //Window
         myWindow.setLayout(new GridLayout(1, 0, 0, 0));
         myWindow.setJMenuBar(myMenuBar);
@@ -152,22 +148,25 @@ public final class TetrisGUI implements PropertyChangeListener {
         myWindow.setResizable(false);
         myWindow.pack();
         myWindow.setVisible(true);
+        myWindow.requestFocus();
 
     }
 
     private void addListenersAndPropertyChangeListeners() {
         myWindow.addKeyListener(new MyKeyAdapter());
         myMenuBar.addPropertyChangeListener(this);
+        BOARD.addPropertyChangeListener(this);
         BOARD.addPropertyChangeListener((PropertyChangeListener) myGamePanel);
         BOARD.addPropertyChangeListener((PropertyChangeListener) myNextPiecePanel);
-        myMenuBar.addPropertyChangeListener((PropertyChangeListener) myGamePanel);
-        myGameOverPanel.addPropertyChangeListener(this);
+        BOARD.addPropertyChangeListener((PropertyChangeListener) myInfoPanel);
+        myInfoPanel.addPropertyChangeListener(this);
     }
 
     private void gameStart() {
         TIMER.start();
         BOARD.newGame();
         playMusic("/assets/sound/tetris.wav");
+        myGameStarted = true;
     }
 
     @Override
@@ -175,32 +174,9 @@ public final class TetrisGUI implements PropertyChangeListener {
         if (BoardInterface.GAME_STARTING.equals(theEvt.getPropertyName())) {
             gameStart();
         } else if (BoardInterface.GAME_END.equals(theEvt.getPropertyName())) {
-            makeGameOverScreen();
-            myGamePanel.revalidate();
-        } else if (BoardInterface.GAME_STARTING.equals(theEvt.getPropertyName())) {
-            removeGameOverScreen();
-            myGamePanel.revalidate();
-        }
-    }
-
-    private static final class MyKeyAdapter extends KeyAdapter {
-        @Override
-        public void keyPressed(final KeyEvent theE) {
-            if (theE.getKeyCode() == KeyEvent.VK_A || theE.getKeyCode() == KeyEvent.VK_LEFT) {
-                BOARD.left();
-            } else if (theE.getKeyCode() == KeyEvent.VK_D
-                       || theE.getKeyCode() == KeyEvent.VK_RIGHT) {
-                BOARD.right();
-            } else if (theE.getKeyCode() == KeyEvent.VK_S
-                       || theE.getKeyCode() == KeyEvent.VK_DOWN) {
-                BOARD.down();
-            } else if (theE.getKeyCode() == KeyEvent.VK_SPACE) {
-                BOARD.drop();
-                TIMER.restart();
-            } else if (theE.getKeyCode() == KeyEvent.VK_W
-                       || theE.getKeyCode() == KeyEvent.VK_UP) {
-                BOARD.rotateCW();
-            }
+            myGameStarted = false;
+        } else if (BoardInterface.LEVEL_CHANGING.equals(theEvt.getPropertyName())) {
+            TIMER.setDelay((int) (BASE_SPEED / Math.log((int) theEvt.getNewValue() + 1)));
         }
     }
 
@@ -210,24 +186,43 @@ public final class TetrisGUI implements PropertyChangeListener {
      */
     private void playMusic(final String theFilePath) {
         try {
-            final URL url = this.getClass().getResource(theFilePath);
+            final URL url = Objects.requireNonNull(this.getClass().getResource(theFilePath));
             final AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
             final Clip clip = AudioSystem.getClip();
             clip.open(audioIn);
             clip.start();
             clip.loop(Clip.LOOP_CONTINUOUSLY); // Loop the music continuously.
-        } catch (final UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+        } catch (final UnsupportedAudioFileException | IOException
+                 | LineUnavailableException e) {
             e.printStackTrace();
         }
     }
 
-    private void makeGameOverScreen() {
-        myGameOverPanel.setVisible(true);
+    private final class MyKeyAdapter extends KeyAdapter {
 
-    }
+        /** Used to store all Keybinds. */
+        @SuppressWarnings("All")
+        private final HashMap<Integer, Runnable> myKeys = new HashMap<>();
 
-    private void removeGameOverScreen() {
-        myGameOverPanel.setVisible(false);
+        MyKeyAdapter() {
+            super();
+            myKeys.put(KeyEvent.VK_UP, BOARD::rotateCW);
+            myKeys.put(KeyEvent.VK_W, BOARD::rotateCW);
+            myKeys.put(KeyEvent.VK_DOWN, BOARD::down);
+            myKeys.put(KeyEvent.VK_S, BOARD::down);
+            myKeys.put(KeyEvent.VK_LEFT, BOARD::left);
+            myKeys.put(KeyEvent.VK_A, BOARD::left);
+            myKeys.put(KeyEvent.VK_RIGHT, BOARD::right);
+            myKeys.put(KeyEvent.VK_D, BOARD::right);
+            myKeys.put(KeyEvent.VK_SPACE, BOARD::drop);
+        }
+
+        @Override
+        public void keyPressed(final KeyEvent theE) {
+            if (TetrisGUI.this.myGameStarted && myKeys.containsKey(theE.getKeyCode())) {
+                myKeys.get(theE.getKeyCode()).run();
+            }
+        }
     }
 }
 

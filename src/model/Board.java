@@ -37,10 +37,6 @@ import model.wallkicks.WallKick;
 
 public class Board implements BoardInterface {
 
-    // Class constants
-    /** Used for debugging to ensure no extra panels are instantiated. */
-    private static int cnt;
-
     /**
      * Default width of a Tetris game board.
      */
@@ -95,6 +91,11 @@ public class Board implements BoardInterface {
     private MovableTetrisPiece myCurrentPiece;
 
     /**
+     * Piece that is currently movable.
+     */
+    private MovableTetrisPiece myGhostPiece;
+
+    /**
      * A flag to indicate when moving a piece down is part of a drop operation.
      * This is used to prevent the Board from notifying observers for each incremental
      * down movement in the drop.
@@ -122,10 +123,6 @@ public class Board implements BoardInterface {
      */
     public Board(final int theWidth, final int theHeight) {
         super();
-        if (cnt > 0) {
-            throw new IllegalStateException();
-        }
-        cnt++;
         myWidth = theWidth;
         myHeight = theHeight;
         myFrozenBlocks = new LinkedList<>();
@@ -179,6 +176,7 @@ public class Board implements BoardInterface {
         myGameOver = false;
         myCurrentPiece = nextMovablePiece(true);
         myDrop = false;
+        updateGhostPiece();
         myPcs.firePropertyChange(CURRENT_PIECE_CHANGING, null, myCurrentPiece);
     }
 
@@ -228,6 +226,7 @@ public class Board implements BoardInterface {
                 myCurrentPiece = nextMovablePiece(false);
             }
             myPcs.firePropertyChange(CURRENT_PIECE_CHANGING, null, myCurrentPiece);
+            myPcs.firePropertyChange(FROZEN_CHANGING, null, myFrozenBlocks);
         }
     }
 
@@ -365,11 +364,22 @@ public class Board implements BoardInterface {
         if (isPieceLegal(theMovedPiece)) {
             myCurrentPiece = theMovedPiece;
             result = true;
+            updateGhostPiece();
             if (!myDrop) {
                 myPcs.firePropertyChange(CURRENT_PIECE_CHANGING, null, myCurrentPiece);
             }
         }
         return result;
+    }
+
+    private void updateGhostPiece() {
+        MovableTetrisPiece ghost = myCurrentPiece;
+        while (isPieceLegal(ghost.down())) {
+            ghost = ghost.down();
+        }
+        myGhostPiece = ghost;
+
+        myPcs.firePropertyChange(GHOST_PIECE_CHANGING, null, myGhostPiece);
     }
 
     /**
@@ -428,9 +438,9 @@ public class Board implements BoardInterface {
             }
             if (complete) {
                 completeRows.add(myFrozenBlocks.indexOf(row));
-                myPcs.firePropertyChange(ROW_CHANGE, null, completeRows.size());
             }
         }
+        myPcs.firePropertyChange(ROW_CHANGE, null, completeRows.size());
         // loop through list backwards removing items by index
         if (!completeRows.isEmpty()) {
             for (int i = completeRows.size() - 1; i >= 0; i--) {
@@ -438,6 +448,7 @@ public class Board implements BoardInterface {
                 myFrozenBlocks.remove(row);
                 myFrozenBlocks.add(new Block[myWidth]);
             }
+            myPcs.firePropertyChange(FROZEN_CHANGING, null, myFrozenBlocks);
         }
     }
     
@@ -558,6 +569,7 @@ public class Board implements BoardInterface {
         if (share && !myGameOver) {
             myPcs.firePropertyChange(NEXT_PIECE_CHANGE, null, myNextPiece);
         }
+
     }
 
     @Override

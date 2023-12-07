@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.Color;
+import model.Block;
 import model.MovableTetrisPiece;
 import model.TetrisPiece;
 
@@ -19,12 +20,13 @@ public final class TetrisPieceColors {
     }
 
     /**
-     * Used to find the color of TetrisPiece.
-     * @param thePiece The TetrisPiece.
-     * @return The color of the TetrisPiece.
+     * Used to find color of the Block.
+     * @param theBlock The Block.
+     * @return the Color of the Block.
      */
-    public static Color getColor(final TetrisPiece thePiece) {
-        return switch (thePiece) {
+    public static Color getColor(final Block theBlock) {
+        return switch (theBlock) {
+            case EMPTY -> Color.BLACK;
             case I -> Color.CYAN;
             case J -> Color.BLUE;
             case L -> Color.ORANGE;
@@ -42,5 +44,14 @@ public final class TetrisPieceColors {
      */
     public static Color getColor(final MovableTetrisPiece thePiece) {
         return getColor(thePiece.getTetrisPiece());
+    }
+
+    /**
+     * Used to find the color of TetrisPiece.
+     * @param thePiece The TetrisPiece.
+     * @return The color of the TetrisPiece.
+     */
+    public static Color getColor(final TetrisPiece thePiece) {
+        return getColor(thePiece.getBlock());
     }
 }
