@@ -91,6 +91,11 @@ public class Board implements BoardInterface {
     private MovableTetrisPiece myCurrentPiece;
 
     /**
+     * Piece that is currently movable.
+     */
+    private MovableTetrisPiece myGhostPiece;
+
+    /**
      * A flag to indicate when moving a piece down is part of a drop operation.
      * This is used to prevent the Board from notifying observers for each incremental
      * down movement in the drop.
@@ -171,6 +176,7 @@ public class Board implements BoardInterface {
         myGameOver = false;
         myCurrentPiece = nextMovablePiece(true);
         myDrop = false;
+        updateGhostPiece();
         myPcs.firePropertyChange(CURRENT_PIECE_CHANGING, null, myCurrentPiece);
     }
 
@@ -358,11 +364,22 @@ public class Board implements BoardInterface {
         if (isPieceLegal(theMovedPiece)) {
             myCurrentPiece = theMovedPiece;
             result = true;
+            updateGhostPiece();
             if (!myDrop) {
                 myPcs.firePropertyChange(CURRENT_PIECE_CHANGING, null, myCurrentPiece);
             }
         }
         return result;
+    }
+
+    private void updateGhostPiece() {
+        MovableTetrisPiece ghost = myCurrentPiece;
+        while (isPieceLegal(ghost.down())) {
+            ghost = ghost.down();
+        }
+        myGhostPiece = ghost;
+
+        myPcs.firePropertyChange(GHOST_PIECE_CHANGING, null, myGhostPiece);
     }
 
     /**

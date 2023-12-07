@@ -20,6 +20,9 @@ public interface BoardInterface {
     /** Used to notify listeners the game is ending. */
     String CURRENT_PIECE_CHANGING = "Current Piece is Changing";
 
+    /** Used to notify listeners the game is ending. */
+    String GHOST_PIECE_CHANGING = "Ghost Piece is Changing";
+
     /** Used to notify listeners the frozen blocks changing. */
     String ROW_CHANGE = "My Rows Have Changed";
 
