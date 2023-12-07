@@ -35,11 +35,6 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
     public static final Color OTHER_RED = new Color(80, 0, 0);
 
     /**
-     * Used for debugging to ensure no extra panels are instantiated.
-     */
-    private static int cnt;
-
-    /**
      * The stroke width in pixels.
      */
     private static final int STROKE_WIDTH = 2;
@@ -69,10 +64,6 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
      */
     public GamePanel() {
         super();
-        if (cnt > 0) {
-            throw new IllegalStateException();
-        }
-        cnt++;
         this.setPreferredSize(new Dimension(TetrisGUI.SIZE / 2, TetrisGUI.SIZE));
         this.setBackground(Color.BLACK);
 
@@ -106,6 +97,7 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void propertyChange(final PropertyChangeEvent theEvent) {
         if (BoardInterface.CURRENT_PIECE_CHANGING.equals(theEvent.getPropertyName())) {
             myCurrentPiece = (MovableTetrisPiece) theEvent.getNewValue();
