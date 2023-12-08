@@ -56,6 +56,11 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
     private MovableTetrisPiece myCurrentPiece;
 
     /**
+     * The ghost piece.
+     */
+    private MovableTetrisPiece myGhostPiece;
+
+    /**
     * The frozen blocks on the board.
      */
     private List<Block[]> myFrozenBlocks;
@@ -79,6 +84,20 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
     protected void paintComponent(final Graphics theG) {
         super.paintComponent(theG);
         final Graphics2D g2d = (Graphics2D) theG;
+
+        if (myGhostPiece != null) {
+            final Point[] p = myGhostPiece.getBoardPoints();
+            for (final Point k : p) {
+                g2d.setPaint(Color.BLACK);
+                g2d.fillRect(k.x() * GamePanel.SQUARE_SIZE,
+                        (this.getHeight() - SQUARE_SIZE) - k.y() * GamePanel.SQUARE_SIZE,
+                        GamePanel.SQUARE_SIZE + 1, GamePanel.SQUARE_SIZE + 1);
+                g2d.setPaint(Color.LIGHT_GRAY);
+                g2d.fillRect(k.x() * GamePanel.SQUARE_SIZE + 1,
+                        (this.getHeight() - SQUARE_SIZE) - k.y() * GamePanel.SQUARE_SIZE + 1,
+                        GamePanel.SQUARE_SIZE - 1, GamePanel.SQUARE_SIZE - 1);
+            }
+        }
 
         if (myCurrentPiece != null) {
             final Point[] i = myCurrentPiece.getBoardPoints();
@@ -117,9 +136,21 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
             repaint();
         } else if (BoardInterface.FROZEN_CHANGING.equals(theEvent.getPropertyName())) {
             myFrozenBlocks = (LinkedList<Block[]>) theEvent.getNewValue();
+            if (myGhostPiece != null) {
+                final Point[] p = myGhostPiece.getBoardPoints();
+                for (final Point k : p) {
+                    if (myFrozenBlocks.get(k.y())[k.x()] == null) {
+                        myGhostPiece = null;
+                        break;
+                    }
+                }
+            }
             repaint();
         } else if (BoardInterface.GAME_PAUSED.equals(theEvent.getPropertyName())) {
             myGamePaused = (boolean) theEvent.getNewValue();
+            repaint();
+        } else if (BoardInterface.GHOST_PIECE_CHANGING.equals(theEvent.getPropertyName())) {
+            myGhostPiece = (MovableTetrisPiece) theEvent.getNewValue();
             repaint();
         }
     }

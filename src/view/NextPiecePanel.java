@@ -23,6 +23,15 @@ import model.TetrisPiece;
  */
 public final class NextPiecePanel extends JPanel implements PropertyChangeListener {
 
+    /**
+     * A set size for the width of a block.
+     */
+    private static final int TETRIS_PIECE_WIDTH = 4;
+    /**
+     * A set size for the width of a block.
+     */
+    private static final int TETRIS_PIECE_HEIGHT = 5;
+
     /** Used for debugging to ensure no extra panels are instantiated. */
     private static int cnt;
 
@@ -84,12 +93,16 @@ public final class NextPiecePanel extends JPanel implements PropertyChangeListen
             for (final Point k : i) {
                 g2d.setPaint(TetrisPieceColors.getColor(myNextPiece));
                 if (myNextPiece == TetrisPiece.O) {
-                    g2d.fillRect(k.y() * GamePanel.SQUARE_SIZE + (getWidth() - 4 * GamePanel.SQUARE_SIZE) / 2,
-                            k.x() * GamePanel.SQUARE_SIZE + (getHeight() - 4 * GamePanel.SQUARE_SIZE) / 2,
+                    g2d.fillRect(k.y() * GamePanel.SQUARE_SIZE + (getWidth()
+                                    - TETRIS_PIECE_WIDTH * GamePanel.SQUARE_SIZE) / 2,
+                            k.x() * GamePanel.SQUARE_SIZE + (getHeight() - TETRIS_PIECE_WIDTH
+                                    * GamePanel.SQUARE_SIZE) / 2,
                             GamePanel.SQUARE_SIZE - 1, GamePanel.SQUARE_SIZE - 1);
                 } else if (myNextPiece == TetrisPiece.I) {
-                    g2d.fillRect(k.x() * GamePanel.SQUARE_SIZE + (getWidth() - 4 * GamePanel.SQUARE_SIZE) / 2,
-                            k.y() * GamePanel.SQUARE_SIZE + (getHeight() - 5 * GamePanel.SQUARE_SIZE) / 2,
+                    g2d.fillRect(k.x() * GamePanel.SQUARE_SIZE + (getWidth()
+                                    - TETRIS_PIECE_WIDTH * GamePanel.SQUARE_SIZE) / 2,
+                            k.y() * GamePanel.SQUARE_SIZE + (getHeight()
+                                    - TETRIS_PIECE_HEIGHT * GamePanel.SQUARE_SIZE) / 2,
                             GamePanel.SQUARE_SIZE - 1, GamePanel.SQUARE_SIZE - 1);
                 } else {
                     g2d.fillRect(k.x() * GamePanel.SQUARE_SIZE + X_OFFSET + 1,
