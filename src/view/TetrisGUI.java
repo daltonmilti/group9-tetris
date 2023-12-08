@@ -96,6 +96,11 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
      */
     private boolean myGamePause;
 
+    /**
+     * The Clip used to play music.
+     */
+    private Clip myClip;
+
 
     private TetrisGUI() {
         super();
@@ -104,7 +109,6 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
         buildComponents();
         layoutComponents();
         addListenersAndPropertyChangeListeners();
-
     }
 
     /**
@@ -161,7 +165,6 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
         myWindow.pack();
         myWindow.setVisible(true);
         myWindow.requestFocus();
-
     }
 
     private void addListenersAndPropertyChangeListeners() {
@@ -186,9 +189,11 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
         myGamePause = !myGamePause;
         if (myGamePause) {
             TIMER.stop();
+            myClip.stop();
             myPcs.firePropertyChange(BoardInterface.GAME_PAUSED, !myGamePause, myGamePause);
         } else {
             TIMER.start();
+            myClip.start();
             myPcs.firePropertyChange(BoardInterface.GAME_PAUSED, !myGamePause, myGamePause);
         }
     }
@@ -198,6 +203,7 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
         if (BoardInterface.GAME_STARTING.equals(theEvt.getPropertyName()) && !myGameStarted) {
             gameStart();
         } else if (BoardInterface.GAME_END.equals(theEvt.getPropertyName())) {
+            myClip.close();
             myGameStarted = false;
         } else if (BoardInterface.LEVEL_CHANGING.equals(theEvt.getPropertyName())) {
             TIMER.setDelay((int) (BASE_SPEED / Math.log((int) theEvt.getNewValue() + 1)));
@@ -211,10 +217,10 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
         try {
             final URL url = this.getClass().getResource(theFilePath);
             final AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
-            final Clip clip = AudioSystem.getClip();
-            clip.open(audioIn);
-            clip.start();
-            clip.loop(Clip.LOOP_CONTINUOUSLY); // Loop the music continuously.
+            myClip = AudioSystem.getClip();
+            myClip.open(audioIn);
+            myClip.start();
+            myClip.loop(Clip.LOOP_CONTINUOUSLY); // Loop the music continuously.
         } catch (final UnsupportedAudioFileException | IOException
                        | LineUnavailableException e) {
             e.printStackTrace();

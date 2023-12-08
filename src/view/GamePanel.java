@@ -1,12 +1,18 @@
 package view;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.LinkedList;
 import java.util.List;
 import javax.swing.JPanel;
-import model.*;
+import model.Block;
+import model.BoardInterface;
+import model.MovableTetrisPiece;
 import model.Point;
 
 /**
@@ -50,12 +56,7 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
     private MovableTetrisPiece myCurrentPiece;
 
     /**
-     * The ghost piece.
-     */
-    private MovableTetrisPiece myGhostPiece;
-
-    /**
-     * The frozen blocks on the board.
+    * The frozen blocks on the board.
      */
     private List<Block[]> myFrozenBlocks;
 
@@ -79,27 +80,6 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
         super.paintComponent(theG);
         final Graphics2D g2d = (Graphics2D) theG;
 
-        if (myGhostPiece != null) {
-            final Point[] p = myGhostPiece.getBoardPoints();
-            for (final Point k : p) {
-                g2d.setPaint(Color.BLACK);
-                g2d.fillRect(k.x() * GamePanel.SQUARE_SIZE,
-                        (this.getHeight() - SQUARE_SIZE) - k.y() * GamePanel.SQUARE_SIZE,
-                        GamePanel.SQUARE_SIZE + 1, GamePanel.SQUARE_SIZE + 1);
-                g2d.setPaint(Color.LIGHT_GRAY);
-                g2d.fillRect(k.x() * GamePanel.SQUARE_SIZE + 1,
-                        (this.getHeight() - SQUARE_SIZE) - k.y() * GamePanel.SQUARE_SIZE + 1,
-                        GamePanel.SQUARE_SIZE - 1, GamePanel.SQUARE_SIZE - 1);
-            }
-        }
-        if (myFrozenBlocks != null) {
-            for (int i = 0; i < myFrozenBlocks.size(); i++) {
-                for (int k = 0; k < myFrozenBlocks.get(0).length; k++) {
-                    paintBlock(myFrozenBlocks.get(i)[k], g2d, i, k);
-                }
-            }
-        }
-
         if (myCurrentPiece != null) {
             final Point[] i = myCurrentPiece.getBoardPoints();
             for (final Point k : i) {
@@ -113,11 +93,19 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
                         GamePanel.SQUARE_SIZE - 1, GamePanel.SQUARE_SIZE - 1);
             }
         }
-
+        if (myFrozenBlocks != null) {
+            for (int i = 0; i < myFrozenBlocks.size(); i++) {
+                for (int k = 0; k < myFrozenBlocks.get(0).length; k++) {
+                    paintBlock(myFrozenBlocks.get(i)[k], g2d, i, k);
+                }
+            }
+        }
         if (myGamePaused) {
             g2d.setPaint(Color.BLACK);
-            g2d.setFont(new Font("TimesRoman", Font.PLAIN, 60));
-            g2d.drawString("PAUSED", 85, 415);
+            g2d.setFont(new Font("TimesRoman", Font.ROMAN_BASELINE, 70));
+            g2d.setPaint(Color.WHITE);
+            g2d.drawString("PAUSED", 55, 415);
+
         }
     }
 
@@ -132,9 +120,6 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
             repaint();
         } else if (BoardInterface.GAME_PAUSED.equals(theEvent.getPropertyName())) {
             myGamePaused = (boolean) theEvent.getNewValue();
-            repaint();
-        } else if (BoardInterface.GHOST_PIECE_CHANGING.equals(theEvent.getPropertyName())) {
-            myGhostPiece = (MovableTetrisPiece) theEvent.getNewValue();
             repaint();
         }
     }
