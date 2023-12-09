@@ -6,6 +6,8 @@ import java.awt.Font;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -21,6 +23,11 @@ import javax.swing.JPanel;
 public final class InfoPanel extends JPanel implements PropertyChangeListener {
 
     /**
+     * Times New Roman font to use.
+     */
+    private static final String TIMES_NEW_ROMAN_FONT = "Times New Roman";
+
+    /**
      * Text constant for the score.
      */
     private static final String SCORE_LABEL = "Current Score: ";
@@ -34,6 +41,11 @@ public final class InfoPanel extends JPanel implements PropertyChangeListener {
      * Text constant for the rows cleared.
      */
     private static final String ROWS_LABEL = "Rows Cleared: ";
+
+    /**
+     * Text constant for the rows cleared.
+     */
+    private static final String ROWS_TILL_LABEL = "Rows Till Next Level: ";
 
     /**
      * Font size for labels.
@@ -96,6 +108,11 @@ public final class InfoPanel extends JPanel implements PropertyChangeListener {
      */
     private JLabel myRowText;
 
+    /**
+     * Label for the rows needed to progress to next level.
+     */
+    private JLabel myRowTillNext;
+
     /** PropertyChangeSupport for all listeners */
     private final PropertyChangeSupport myPcs;
 
@@ -108,6 +125,9 @@ public final class InfoPanel extends JPanel implements PropertyChangeListener {
         buildComponents();
     }
 
+    //Method adds many JLabels to a specific region.
+    //Not really possible to split up into different methods or simplify.
+    @SuppressWarnings("OverlyLongMethod")
     private void buildComponents() {
         myLevel = 1;
         myPastLevel = 1;
@@ -115,17 +135,50 @@ public final class InfoPanel extends JPanel implements PropertyChangeListener {
                 new Dimension(TetrisGUI.SIZE / 2, TetrisGUI.SIZE / 2));
         this.setBackground(Color.WHITE);
         myScoreText = new JLabel();
-        myScoreText.setFont(new Font("", Font.BOLD, FONT_SIZE));
+        myScoreText.setFont(new Font(TIMES_NEW_ROMAN_FONT, Font.BOLD, FONT_SIZE));
         myScoreText.setText(SCORE_LABEL + myScore);
         this.add(myScoreText);
         myLevelText = new JLabel();
-        myLevelText.setFont(new Font("", Font.BOLD, FONT_SIZE));
+        myLevelText.setFont(new Font(TIMES_NEW_ROMAN_FONT, Font.BOLD, FONT_SIZE));
         myLevelText.setText(LEVEL_LABEL + myLevel);
         this.add(myLevelText);
         myRowText = new JLabel();
-        myRowText.setFont(new Font("", Font.BOLD, FONT_SIZE));
+        myRowText.setFont(new Font(TIMES_NEW_ROMAN_FONT, Font.BOLD, FONT_SIZE));
         myRowText.setText(ROWS_LABEL + myClearedRows);
         this.add(myRowText);
+        myRowTillNext = new JLabel();
+        myRowTillNext.setFont(new Font(TIMES_NEW_ROMAN_FONT, Font.BOLD, FONT_SIZE));
+        myRowTillNext.setText(ROWS_TILL_LABEL + 0);
+        this.add(myRowTillNext);
+        this.add(createControlBox());
+    }
+
+    //Method adds many JLabels to a specific Box.
+    //Not really possible to split up into different methods or simplify.
+    @SuppressWarnings({"toocomplex", "OverlyLongMethod"})
+    private Box createControlBox() {
+        final Box b = Box.createVerticalBox();
+        final Font font = new Font(TIMES_NEW_ROMAN_FONT, Font.PLAIN, 20);
+        b.setBorder(BorderFactory.createDashedBorder(Color.BLACK));
+        JLabel currentLabel = new JLabel(" Rotate Clockwise:   Up Arrow or W   ");
+        currentLabel.setFont(font);
+        b.add(currentLabel);
+        currentLabel = new JLabel(" Move Down:           Down Arrow or S  ");
+        currentLabel.setFont(font);
+        b.add(currentLabel);
+        currentLabel = new JLabel(" Move Left:              Left Arrow or D");
+        currentLabel.setFont(font);
+        b.add(currentLabel);
+        currentLabel = new JLabel(" Move Right:            Right Arrow or A");
+        currentLabel.setFont(font);
+        b.add(currentLabel);
+        currentLabel = new JLabel(" Drop:                      Spacebar ");
+        currentLabel.setFont(font);
+        b.add(currentLabel);
+        currentLabel = new JLabel(" Pause:                     P ");
+        currentLabel.setFont(font);
+        b.add(currentLabel);
+        return b;
     }
 
     private void display(final int theRowsCleared) {
@@ -139,6 +192,8 @@ public final class InfoPanel extends JPanel implements PropertyChangeListener {
         myScoreText.setText(SCORE_LABEL + myScore);
         myLevelText.setText(LEVEL_LABEL + myLevel);
         myRowText.setText(ROWS_LABEL + myClearedRows);
+        myRowTillNext.setText(ROWS_TILL_LABEL
+                             + ((ROWS_TO_PROGRESS * myLevel) - myClearedRows));
     }
 
     private int calculateScore(final int theRowsCleared) {

@@ -103,21 +103,29 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
             }
         }
         if (myGamePaused) {
-            g2d.setPaint(Color.BLACK);
-            g2d.setFont(new Font(TEXT_ROMAN, Font.PLAIN, PAUSED_FONT_SIZE));
-            g2d.setPaint(Color.WHITE);
-            g2d.drawString("PAUSED", PAUSED_POINT.x(), PAUSED_POINT.y());
+            paintGamePaused(g2d);
         }
         if (myGameOver) {
-            //background
-            g2d.setPaint(Color.WHITE);
-            g2d.fillRect(0, 350, 400, 100);
-
-            //font
-            g2d.setFont(new Font(TEXT_ROMAN, Font.PLAIN, GAME_OVER_FONT_SIZE));
-            g2d.setPaint(Color.RED);
-            g2d.drawString("GAME OVER", PAUSED_POINT.x(), PAUSED_POINT.y());
+            paintGameOver(g2d);
         }
+    }
+
+    private void paintGameOver(final Graphics2D theG2D) {
+        //background
+        theG2D.setPaint(Color.GRAY);
+        theG2D.fillRect(0, 350, 400, 100);
+
+        //font
+        theG2D.setFont(new Font(TEXT_ROMAN, Font.PLAIN, GAME_OVER_FONT_SIZE));
+        theG2D.setPaint(Color.RED);
+        theG2D.drawString("GAME OVER", PAUSED_POINT.x(), PAUSED_POINT.y());
+    }
+
+    private void paintGamePaused(final Graphics2D theG2D) {
+        theG2D.setPaint(Color.BLACK);
+        theG2D.setFont(new Font(TEXT_ROMAN, Font.PLAIN, PAUSED_FONT_SIZE));
+        theG2D.setPaint(Color.WHITE);
+        theG2D.drawString("PAUSED", PAUSED_POINT.x(), PAUSED_POINT.y());
     }
 
     private void paintPiece(final Graphics2D theG2D,

@@ -35,6 +35,9 @@ import model.wallkicks.WallKick;
  * @version 1.3
  */
 
+//All fields and methods are required for the
+//extra credit and board to function properly.
+@SuppressWarnings({"ClassWithTooManyMethods", "OverlyComplexClass"})
 public class Board implements BoardInterface {
 
     /**

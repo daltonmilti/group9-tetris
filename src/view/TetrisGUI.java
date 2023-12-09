@@ -36,6 +36,11 @@ import model.BoardInterface;
  * @author chriseetwo
  * @version Autumn 2023
  */
+
+//All fields present are needed.
+//There is not a great way to reduce fields
+//count while retaining an error free environment.
+@SuppressWarnings("ClassWithTooManyFields")
 public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMethods {
 
     /**
@@ -180,7 +185,9 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
         BOARD.addPropertyChangeListener((PropertyChangeListener) myNextPiecePanel);
         BOARD.addPropertyChangeListener((PropertyChangeListener) myInfoPanel);
         myInfoPanel.addPropertyChangeListener(this);
+        myMenuBar.addPropertyChangeListener((PropertyChangeListener) myGamePanel);
         this.addPropertyChangeListener((PropertyChangeListener) myGamePanel);
+
     }
 
     private void gameStart() {
@@ -228,8 +235,7 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
             clip.open(audioIn);
             clip.start();
         } catch (final UnsupportedAudioFileException | IOException
-                       | LineUnavailableException e) {
-            e.printStackTrace();
+                       | LineUnavailableException ignored) {
         }
     }
 
@@ -256,8 +262,7 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
             clip.open(audioIn);
             clip.start();
         } catch (final UnsupportedAudioFileException | IOException
-                       | LineUnavailableException e) {
-            e.printStackTrace();
+                       | LineUnavailableException ignored) {
         }
     }
 
@@ -278,8 +283,7 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
             myClip.start();
             myClip.loop(Clip.LOOP_CONTINUOUSLY); // Loop the music continuously.
         } catch (final UnsupportedAudioFileException | IOException
-                       | LineUnavailableException e) {
-            e.printStackTrace();
+                       | LineUnavailableException ignored) {
         }
     }
 
@@ -312,8 +316,7 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
             gainControl.setValue(volume);
             clip.start();
         } catch (final UnsupportedAudioFileException | IOException
-                       | LineUnavailableException e) {
-            e.printStackTrace();
+                       | LineUnavailableException ignored) {
         }
     }
 
@@ -345,6 +348,10 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
         @SuppressWarnings("All")
         private final HashMap<Integer, Runnable> myKeys = new HashMap<>();
 
+        //Original suppresion warning was "checkstyle:ExecutableStatementCount"
+        //Error didn't go away. Suppression is needed as all keysbinds are a
+        //Requirement for the project.
+        @SuppressWarnings("All")
         MyKeyAdapter() {
             super();
             myKeys.put(KeyEvent.VK_UP, BOARD::rotateCW);
