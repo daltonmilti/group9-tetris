@@ -185,11 +185,11 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
         myGamePause = !myGamePause;
         if (myGamePause) {
             TIMER.stop();
-            myClip.stop();
+            pauseMusic();
             myPcs.firePropertyChange(BoardInterface.GAME_PAUSED, !myGamePause, myGamePause);
         } else {
             TIMER.start();
-            myClip.start();
+            pauseMusic();
             myPcs.firePropertyChange(BoardInterface.GAME_PAUSED, !myGamePause, myGamePause);
         }
     }
@@ -271,22 +271,28 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
             final AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
             myClip = AudioSystem.getClip();
             myClip.open(audioIn);
-
-            // Get the gain control
-            final FloatControl gainControl =
-                    (FloatControl) myClip.getControl(FloatControl.Type.MASTER_GAIN);
-
-            // Reduce volume by a number of decibels (e.g., -10.0f)
-            final float volume = -10.0f; // Value in decibels
-
-            gainControl.setValue(volume);
-
             myClip.start();
             myClip.loop(Clip.LOOP_CONTINUOUSLY); // Loop the music continuously.
         } catch (final UnsupportedAudioFileException | IOException
                        | LineUnavailableException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * pause music
+     */
+    private void pauseMusic() {
+        // Get the gain control
+        final FloatControl gainControl =
+                (FloatControl) myClip.getControl(FloatControl.Type.MASTER_GAIN);
+        final float volume;
+        if (myGamePause) {
+            volume = -25.0f; // Value in decibels
+        } else {
+            volume = 0.0f; // Value in decibels
+        }
+        gainControl.setValue(volume);
     }
 
     private void drop() {
