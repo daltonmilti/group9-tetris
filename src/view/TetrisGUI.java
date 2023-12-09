@@ -47,7 +47,7 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
     private static final Timer TIMER = new Timer(BASE_SPEED, theE -> BOARD.step());
 
     /** PropertyChangeSupport for all listeners */
-    private PropertyChangeSupport myPcs;
+    private final PropertyChangeSupport myPcs;
 
     /** The Tetris Frame. */
     private JFrame myWindow;
@@ -198,7 +198,8 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
     public void propertyChange(final PropertyChangeEvent theEvt) {
         if (BoardInterface.GAME_STARTING.equals(theEvt.getPropertyName()) && !myGameStarted) {
             gameStart();
-        } else if (BoardInterface.GAME_END.equals(theEvt.getPropertyName())) {
+        } else if (BoardInterface.GAME_END.equals(theEvt.getPropertyName())
+                   && (boolean) theEvt.getNewValue()) {
             myClip.close();
             myGameStarted = false;
             playGameOver();
@@ -234,8 +235,7 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
         final Random r = new Random();
         String filePath = "";
         final int randomInt = r.nextInt(3);
-        Clip clip;
-
+        final Clip clip;
         if (randomInt == 0) {
             filePath = "/assets/sound/charles_yes_1.wav";
         } else if (randomInt == 1) {

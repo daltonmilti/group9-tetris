@@ -172,6 +172,7 @@ public class Board implements BoardInterface {
         myCurrentPiece = nextMovablePiece(true);
         myDrop = false;
         updateGhostPiece();
+        myPcs.firePropertyChange(GAME_END, null, myGameOver);
         myPcs.firePropertyChange(CURRENT_PIECE_CHANGING, null, myCurrentPiece);
     }
 
