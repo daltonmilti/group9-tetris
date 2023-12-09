@@ -28,7 +28,7 @@ import model.BoardInterface;
  * @author chriseetwo
  * @version Autumn 2023
  */
-public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMethods{
+public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMethods {
 
     /**
      * The main board used for the Tetris project.
@@ -186,24 +186,24 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
         if (myGamePause) {
             TIMER.stop();
             pauseMusic();
-            myPcs.firePropertyChange(BoardInterface.GAME_PAUSED, !myGamePause, myGamePause);
+            myPcs.firePropertyChange(GAME_PAUSED, !myGamePause, myGamePause);
         } else {
             TIMER.start();
             pauseMusic();
-            myPcs.firePropertyChange(BoardInterface.GAME_PAUSED, !myGamePause, myGamePause);
+            myPcs.firePropertyChange(GAME_PAUSED, !myGamePause, myGamePause);
         }
     }
 
     @Override
     public void propertyChange(final PropertyChangeEvent theEvt) {
-        if (BoardInterface.GAME_STARTING.equals(theEvt.getPropertyName()) && !myGameStarted) {
+        if (GAME_STARTING.equals(theEvt.getPropertyName()) && !myGameStarted) {
             gameStart();
-        } else if (BoardInterface.GAME_END.equals(theEvt.getPropertyName())
+        } else if (GAME_END.equals(theEvt.getPropertyName())
                    && (boolean) theEvt.getNewValue()) {
             myClip.close();
             myGameStarted = false;
             playGameOver();
-        } else if (BoardInterface.LEVEL_CHANGING.equals(theEvt.getPropertyName())) {
+        } else if (LEVEL_CHANGING.equals(theEvt.getPropertyName())) {
             TIMER.setDelay((int) (BASE_SPEED / Math.log((int) theEvt.getNewValue() + 1)));
             playLevelUp();
         }
