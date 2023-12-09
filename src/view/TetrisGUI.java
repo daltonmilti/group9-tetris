@@ -56,6 +56,21 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
      */
     private static final int BASE_SPEED = 1000;
 
+    /**
+     * Music volume.
+     */
+    private static final float MUSIC_VOLUME = -15.00f;
+
+    /**
+     * Pause music volume.
+     */
+    private static final float PAUSED_MUSIC_VOLUME = -30.00f;
+
+    /**
+     * Explosion volume.
+     */
+    private static final float EXPLOSION_VOLUME = -30.00f;
+
     /** Used to update step() the board after some time. */
     private static final Timer TIMER = new Timer(BASE_SPEED, theE -> BOARD.step());
 
@@ -109,22 +124,6 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
      * The Clip used to play music.
      */
     private Clip myClip;
-
-    /**
-     * Music volume.
-     */
-    private static final float MUSIC_VOLUME = -15.00f;
-
-    /**
-     * Pause music volume.
-     */
-    private static final float PAUSED_MUSIC_VOLUME = -30.00f;
-
-    /**
-     * Explosion volume.
-     */
-    private static final float EXPLOSION_VOLUME = -30.00f;
-
 
     private TetrisGUI() {
         super();

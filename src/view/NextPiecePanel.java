@@ -60,22 +60,7 @@ public final class NextPiecePanel extends JPanel implements PropertyChangeListen
     protected void paintComponent(final Graphics theG) {
         super.paintComponent(theG);
         final Graphics2D g2d = (Graphics2D) theG;
-        final ArrayList<Point> point = new ArrayList<>();
-        for (int k = 0; k < (this.getWidth() / GamePanel.SQUARE_SIZE); k++) {
-            point.add(new Point(k, 0));
-            point.add(new Point(k, (this.getWidth() / GamePanel.SQUARE_SIZE) - 1));
-            point.add(new Point(0, k));
-            point.add(new Point((this.getWidth() / GamePanel.SQUARE_SIZE) - 1, k));
-        }
-        for (final Point p : point) {
-            g2d.setPaint(Color.BLACK);
-            g2d.fillRect(p.x() * GamePanel.SQUARE_SIZE, p.y() * GamePanel.SQUARE_SIZE,
-                    GamePanel.SQUARE_SIZE + 1, GamePanel.SQUARE_SIZE + 1);
-            g2d.setPaint(TetrisPieceColors.random());
-            g2d.fillRect(p.x() * GamePanel.SQUARE_SIZE + 1,
-                    p.y() * GamePanel.SQUARE_SIZE + 1,
-                    GamePanel.SQUARE_SIZE - 1, GamePanel.SQUARE_SIZE - 1);
-        }
+        createSquareBorder(g2d);
         if (myNextPiece != null) {
             final Point[] i = myNextPiece.getPoints();
             for (final Point k : i) {
@@ -100,6 +85,26 @@ public final class NextPiecePanel extends JPanel implements PropertyChangeListen
             }
         }
     }
+
+    private void createSquareBorder(final Graphics2D theG2D) {
+        final ArrayList<Point> point = new ArrayList<>();
+        for (int k = 0; k < (this.getWidth() / GamePanel.SQUARE_SIZE); k++) {
+            point.add(new Point(k, 0));
+            point.add(new Point(k, (this.getWidth() / GamePanel.SQUARE_SIZE) - 1));
+            point.add(new Point(0, k));
+            point.add(new Point((this.getWidth() / GamePanel.SQUARE_SIZE) - 1, k));
+        }
+        for (final Point p : point) {
+            theG2D.setPaint(Color.BLACK);
+            theG2D.fillRect(p.x() * GamePanel.SQUARE_SIZE, p.y() * GamePanel.SQUARE_SIZE,
+                    GamePanel.SQUARE_SIZE + 1, GamePanel.SQUARE_SIZE + 1);
+            theG2D.setPaint(TetrisPieceColors.random());
+            theG2D.fillRect(p.x() * GamePanel.SQUARE_SIZE + 1,
+                    p.y() * GamePanel.SQUARE_SIZE + 1,
+                    GamePanel.SQUARE_SIZE - 1, GamePanel.SQUARE_SIZE - 1);
+        }
+    }
+
     @Override
     public void propertyChange(final PropertyChangeEvent theEvent) {
         if (PropertyChangeMethods.NEXT_PIECE_CHANGE.equals(theEvent.getPropertyName())) {

@@ -51,6 +51,11 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
     private static final String TEXT_ROMAN = "Times New Roman";
 
     /**
+     * Game Over Specifications
+     */
+    private static final int[] GAME_OVER_SPECS = {350, 400, 100};
+
+    /**
      * The current piece.
      */
     private MovableTetrisPiece myCurrentPiece;
@@ -113,7 +118,7 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
     private void paintGameOver(final Graphics2D theG2D) {
         //background
         theG2D.setPaint(Color.GRAY);
-        theG2D.fillRect(0, 350, 400, 100);
+        theG2D.fillRect(0, GAME_OVER_SPECS[0], GAME_OVER_SPECS[1], GAME_OVER_SPECS[2]);
 
         //font
         theG2D.setFont(new Font(TEXT_ROMAN, Font.PLAIN, GAME_OVER_FONT_SIZE));
