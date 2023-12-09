@@ -212,22 +212,15 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
      * game end sounds
      */
     private void playGameOver() {
-        final Random r = new Random();
-        String filePath = "";
-        final int randomInt = r.nextInt(2);
-
-        if (randomInt == 0) {
-            filePath = "/assets/sound/game_over.wav";
-        } else {
-            filePath = "/assets/sound/charles_bad_1.wav";
-        }
+        String filePath = "/assets/sound/charles_bad_1.wav";
+        Clip clip;
 
         try {
             final URL url = this.getClass().getResource(filePath);
             final AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
-            myClip = AudioSystem.getClip();
-            myClip.open(audioIn);
-            myClip.start();
+            clip = AudioSystem.getClip();
+            clip.open(audioIn);
+            clip.start();
         } catch (final UnsupportedAudioFileException | IOException
                        | LineUnavailableException e) {
             e.printStackTrace();
@@ -241,6 +234,7 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
         final Random r = new Random();
         String filePath = "";
         final int randomInt = r.nextInt(3);
+        Clip clip;
 
         if (randomInt == 0) {
             filePath = "/assets/sound/charles_yes_1.wav";
@@ -253,9 +247,9 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
         try {
             final URL url = this.getClass().getResource(filePath);
             final AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
-            myClip = AudioSystem.getClip();
-            myClip.open(audioIn);
-            myClip.start();
+            clip = AudioSystem.getClip();
+            clip.open(audioIn);
+            clip.start();
         } catch (final UnsupportedAudioFileException | IOException
                        | LineUnavailableException e) {
             e.printStackTrace();
@@ -266,11 +260,15 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
      * for playing music
      */
     private void playMusic(final String theFilePath) {
+        final float volume = -15.00f;
         try {
             final URL url = this.getClass().getResource(theFilePath);
             final AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
             myClip = AudioSystem.getClip();
             myClip.open(audioIn);
+            final FloatControl gainControl =
+                    (FloatControl) myClip.getControl(FloatControl.Type.MASTER_GAIN);
+            gainControl.setValue(volume);
             myClip.start();
             myClip.loop(Clip.LOOP_CONTINUOUSLY); // Loop the music continuously.
         } catch (final UnsupportedAudioFileException | IOException
@@ -283,26 +281,30 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
      * pause music
      */
     private void pauseMusic() {
-        // Get the gain control
         final FloatControl gainControl =
                 (FloatControl) myClip.getControl(FloatControl.Type.MASTER_GAIN);
         final float volume;
         if (myGamePause) {
-            volume = -25.0f; // Value in decibels
+            volume = -30.0f;
         } else {
-            volume = 0.0f; // Value in decibels
+            volume = -15.0f;
         }
         gainControl.setValue(volume);
     }
 
     private void drop() {
         BOARD.drop();
+        final float volume = -30.00f;
+        Clip clip;
         try {
             final URL url = this.getClass().getResource("/assets/sound/explosion.wav");
             final AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
-            myClip = AudioSystem.getClip();
-            myClip.open(audioIn);
-            myClip.start();
+            clip = AudioSystem.getClip();
+            clip.open(audioIn);
+            final FloatControl gainControl =
+                    (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            gainControl.setValue(volume);
+            clip.start();
         } catch (final UnsupportedAudioFileException | IOException
                        | LineUnavailableException e) {
             e.printStackTrace();

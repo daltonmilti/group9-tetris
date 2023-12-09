@@ -36,6 +36,11 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
     private static final Point PAUSED_POINT = new Point(55, 415);
 
     /**
+     * GAME OVER logo font size.
+     */
+    private static final int GAME_OVER_FONT_SIZE = 50;
+
+    /**
      * PAUSED logo font size.
      */
     private static final int PAUSED_FONT_SIZE = 70;
@@ -59,6 +64,11 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
      * Whether or not the game is paused.
      */
     private boolean myGamePaused;
+
+    /**
+     * Whether or not the game is over.
+     */
+    private boolean myGameOver;
 
     /**
      * Creates the Tetris game panel for the TetrisGUI.
@@ -93,6 +103,16 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
             g2d.setPaint(Color.WHITE);
             g2d.drawString("PAUSED", PAUSED_POINT.x(), PAUSED_POINT.y());
 
+        }
+        if (myGameOver) {
+            //background
+            g2d.setPaint(Color.WHITE);
+            g2d.fillRect(0, 350, 400, 100);
+
+            //font
+            g2d.setFont(new Font("Times New Roman", Font.PLAIN, GAME_OVER_FONT_SIZE));
+            g2d.setPaint(Color.RED);
+            g2d.drawString("GAME OVER", PAUSED_POINT.x(), PAUSED_POINT.y());
         }
     }
 
@@ -142,6 +162,9 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
         } else if (PropertyChangeMethods.GHOST_PIECE_CHANGING.
                    equals(theEvent.getPropertyName())) {
             myGhostPiece = (MovableTetrisPiece) theEvent.getNewValue();
+            repaint();
+        } else if (PropertyChangeMethods.GAME_END.equals(theEvent.getPropertyName())) {
+            myGameOver = (boolean) theEvent.getNewValue();
             repaint();
         }
     }
