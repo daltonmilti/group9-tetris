@@ -46,6 +46,11 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
     private static final int PAUSED_FONT_SIZE = 70;
 
     /**
+     * Used to represent Times New Roman font.
+     */
+    private static final String TEXT_ROMAN = "Times New Roman";
+
+    /**
      * The current piece.
      */
     private MovableTetrisPiece myCurrentPiece;
@@ -99,10 +104,9 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
         }
         if (myGamePaused) {
             g2d.setPaint(Color.BLACK);
-            g2d.setFont(new Font("Times New Roman", Font.PLAIN, PAUSED_FONT_SIZE));
+            g2d.setFont(new Font(TEXT_ROMAN, Font.PLAIN, PAUSED_FONT_SIZE));
             g2d.setPaint(Color.WHITE);
             g2d.drawString("PAUSED", PAUSED_POINT.x(), PAUSED_POINT.y());
-
         }
         if (myGameOver) {
             //background
@@ -110,7 +114,7 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
             g2d.fillRect(0, 350, 400, 100);
 
             //font
-            g2d.setFont(new Font("Times New Roman", Font.PLAIN, GAME_OVER_FONT_SIZE));
+            g2d.setFont(new Font(TEXT_ROMAN, Font.PLAIN, GAME_OVER_FONT_SIZE));
             g2d.setPaint(Color.RED);
             g2d.drawString("GAME OVER", PAUSED_POINT.x(), PAUSED_POINT.y());
         }

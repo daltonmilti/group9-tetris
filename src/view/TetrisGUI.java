@@ -2,6 +2,8 @@ package view;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
@@ -10,8 +12,14 @@ import java.beans.PropertyChangeSupport;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.Random;
-import javax.sound.sampled.*;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
@@ -28,7 +36,7 @@ import model.BoardInterface;
  * @author chriseetwo
  * @version Autumn 2023
  */
-public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMethods{
+public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMethods {
 
     /**
      * The main board used for the Tetris project.
@@ -47,7 +55,7 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
     private static final Timer TIMER = new Timer(BASE_SPEED, theE -> BOARD.step());
 
     /** PropertyChangeSupport for all listeners */
-    private PropertyChangeSupport myPcs;
+    private final PropertyChangeSupport myPcs;
 
     /** The Tetris Frame. */
     private JFrame myWindow;
@@ -156,6 +164,7 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
         myWindow.setJMenuBar(myMenuBar);
         myWindow.add(myMainPanel);
         myWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        myWindow.addFocusListener(new MyFocusListener());
         myWindow.setContentPane(myMainPanel);
         myWindow.setResizable(false);
         myWindow.pack();
@@ -177,7 +186,7 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
     private void gameStart() {
         TIMER.start();
         BOARD.newGame();
-        playMusic("/assets/sound/tetris.wav");
+        playMusic();
         myGameStarted = true;
     }
 
@@ -185,24 +194,23 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
         myGamePause = !myGamePause;
         if (myGamePause) {
             TIMER.stop();
-            pauseMusic();
-            myPcs.firePropertyChange(BoardInterface.GAME_PAUSED, !myGamePause, myGamePause);
         } else {
             TIMER.start();
-            pauseMusic();
-            myPcs.firePropertyChange(BoardInterface.GAME_PAUSED, !myGamePause, myGamePause);
         }
+        pauseMusic();
+        myPcs.firePropertyChange(GAME_PAUSED, !myGamePause, myGamePause);
     }
 
     @Override
     public void propertyChange(final PropertyChangeEvent theEvt) {
-        if (BoardInterface.GAME_STARTING.equals(theEvt.getPropertyName()) && !myGameStarted) {
+        if (GAME_STARTING.equals(theEvt.getPropertyName()) && !myGameStarted) {
             gameStart();
-        } else if (BoardInterface.GAME_END.equals(theEvt.getPropertyName())) {
+        } else if (GAME_END.equals(theEvt.getPropertyName())
+                   && (boolean) theEvt.getNewValue()) {
             myClip.close();
             myGameStarted = false;
             playGameOver();
-        } else if (BoardInterface.LEVEL_CHANGING.equals(theEvt.getPropertyName())) {
+        } else if (LEVEL_CHANGING.equals(theEvt.getPropertyName())) {
             TIMER.setDelay((int) (BASE_SPEED / Math.log((int) theEvt.getNewValue() + 1)));
             playLevelUp();
         }
@@ -212,13 +220,11 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
      * game end sounds
      */
     private void playGameOver() {
-        String filePath = "/assets/sound/charles_bad_1.wav";
-        Clip clip;
-
+        final String filePath = "/assets/sound/charles_bad_1.wav";
         try {
-            final URL url = this.getClass().getResource(filePath);
+            final URL url = Objects.requireNonNull(this.getClass().getResource(filePath));
             final AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
-            clip = AudioSystem.getClip();
+            final Clip clip = AudioSystem.getClip();
             clip.open(audioIn);
             clip.start();
         } catch (final UnsupportedAudioFileException | IOException
@@ -232,10 +238,9 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
      */
     private void playLevelUp() {
         final Random r = new Random();
-        String filePath = "";
+        final String filePath;
         final int randomInt = r.nextInt(3);
-        Clip clip;
-
+        final Clip clip;
         if (randomInt == 0) {
             filePath = "/assets/sound/charles_yes_1.wav";
         } else if (randomInt == 1) {
@@ -245,7 +250,7 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
         }
 
         try {
-            final URL url = this.getClass().getResource(filePath);
+            final URL url = Objects.requireNonNull(this.getClass().getResource(filePath));
             final AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
             clip = AudioSystem.getClip();
             clip.open(audioIn);
@@ -259,10 +264,11 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
     /**
      * for playing music
      */
-    private void playMusic(final String theFilePath) {
+    private void playMusic() {
         final float volume = -15.00f;
         try {
-            final URL url = this.getClass().getResource(theFilePath);
+            final URL url = Objects.requireNonNull
+                            (this.getClass().getResource("/assets/sound/tetris.wav"));
             final AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
             myClip = AudioSystem.getClip();
             myClip.open(audioIn);
@@ -295,11 +301,11 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
     private void drop() {
         BOARD.drop();
         final float volume = -30.00f;
-        Clip clip;
         try {
-            final URL url = this.getClass().getResource("/assets/sound/explosion.wav");
+            final URL url = Objects.requireNonNull(
+                            this.getClass().getResource("/assets/sound/explosion.wav"));
             final AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
-            clip = AudioSystem.getClip();
+            final Clip clip = AudioSystem.getClip();
             clip.open(audioIn);
             final FloatControl gainControl =
                     (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
@@ -339,8 +345,6 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
         @SuppressWarnings("All")
         private final HashMap<Integer, Runnable> myKeys = new HashMap<>();
 
-
-        @SuppressWarnings("checkstyle:ExecutableStatementCount")
         MyKeyAdapter() {
             super();
             myKeys.put(KeyEvent.VK_UP, BOARD::rotateCW);
@@ -357,8 +361,25 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
 
         @Override
         public void keyPressed(final KeyEvent theE) {
-            if (TetrisGUI.this.myGameStarted && (!TetrisGUI.this.myGamePause || theE.getKeyCode() == KeyEvent.VK_P) && myKeys.containsKey(theE.getKeyCode())) {
+            if (TetrisGUI.this.myGameStarted && (!TetrisGUI.this.myGamePause
+                || theE.getKeyCode() == KeyEvent.VK_P)
+                && myKeys.containsKey(theE.getKeyCode())) {
                 myKeys.get(theE.getKeyCode()).run();
+            }
+        }
+    }
+    private final class MyFocusListener implements FocusListener {
+        @Override
+        public void focusGained(final FocusEvent theE) {
+            if (myGameStarted && myGamePause) {
+                pause();
+            }
+        }
+
+        @Override
+        public void focusLost(final FocusEvent theE) {
+            if (myGameStarted && !myGamePause) {
+                pause();
             }
         }
     }

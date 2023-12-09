@@ -32,16 +32,12 @@ public final class NextPiecePanel extends JPanel implements PropertyChangeListen
     private static final int TETRIS_PIECE_HEIGHT = 5;
 
     /**
-     * Keeping the T piece in the middle.
-     * This is placeholder value, will later be calculated
-     * using a PropertyChangeListener and a simple algorithm.
+     * Keep all other pieces in the center of the screen.
      */
     private static final int X_OFFSET = 140;
 
     /**
-     * Keeping the T piece in the middle.
-     * This is placeholder value, will later be calculated
-     * using a PropertyChangeListener and a simple algorithm.
+     * Keep all other pieces in the center of the screen.
      */
     private static final int Y_OFFSET = 120;
 
@@ -65,17 +61,17 @@ public final class NextPiecePanel extends JPanel implements PropertyChangeListen
         super.paintComponent(theG);
         final Graphics2D g2d = (Graphics2D) theG;
         final ArrayList<Point> point = new ArrayList<>();
-        for (int k = 0; k < 10; k++) {
+        for (int k = 0; k < (this.getWidth() / GamePanel.SQUARE_SIZE); k++) {
             point.add(new Point(k, 0));
-            point.add(new Point(k, 9));
+            point.add(new Point(k, (this.getWidth() / GamePanel.SQUARE_SIZE) - 1));
             point.add(new Point(0, k));
-            point.add(new Point(9, k));
+            point.add(new Point((this.getWidth() / GamePanel.SQUARE_SIZE) - 1, k));
         }
         for (final Point p : point) {
-            g2d.setPaint(Color.DARK_GRAY);
+            g2d.setPaint(Color.BLACK);
             g2d.fillRect(p.x() * GamePanel.SQUARE_SIZE, p.y() * GamePanel.SQUARE_SIZE,
                     GamePanel.SQUARE_SIZE + 1, GamePanel.SQUARE_SIZE + 1);
-            g2d.setPaint(Color.GRAY);
+            g2d.setPaint(TetrisPieceColors.random());
             g2d.fillRect(p.x() * GamePanel.SQUARE_SIZE + 1,
                     p.y() * GamePanel.SQUARE_SIZE + 1,
                     GamePanel.SQUARE_SIZE - 1, GamePanel.SQUARE_SIZE - 1);
