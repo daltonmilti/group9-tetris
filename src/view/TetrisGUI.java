@@ -110,6 +110,21 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
      */
     private Clip myClip;
 
+    /**
+     * Music volume.
+     */
+    private static final float MUSIC_VOLUME = -15.00f;
+
+    /**
+     * Pause music volume.
+     */
+    private static final float PAUSED_MUSIC_VOLUME = -30.00f;
+
+    /**
+     * Explosion volume.
+     */
+    private static final float EXPLOSION_VOLUME = -30.00f;
+
 
     private TetrisGUI() {
         super();
@@ -270,7 +285,6 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
      * for playing music
      */
     private void playMusic() {
-        final float volume = -15.00f;
         try {
             final URL url = Objects.requireNonNull
                             (this.getClass().getResource("/assets/sound/tetris.wav"));
@@ -279,7 +293,7 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
             myClip.open(audioIn);
             final FloatControl gainControl =
                     (FloatControl) myClip.getControl(FloatControl.Type.MASTER_GAIN);
-            gainControl.setValue(volume);
+            gainControl.setValue(MUSIC_VOLUME);
             myClip.start();
             myClip.loop(Clip.LOOP_CONTINUOUSLY); // Loop the music continuously.
         } catch (final UnsupportedAudioFileException | IOException
@@ -295,16 +309,15 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
                 (FloatControl) myClip.getControl(FloatControl.Type.MASTER_GAIN);
         final float volume;
         if (myGamePause) {
-            volume = -30.0f;
+            volume = PAUSED_MUSIC_VOLUME;
         } else {
-            volume = -15.0f;
+            volume = MUSIC_VOLUME;
         }
         gainControl.setValue(volume);
     }
 
     private void drop() {
         BOARD.drop();
-        final float volume = -30.00f;
         try {
             final URL url = Objects.requireNonNull(
                             this.getClass().getResource("/assets/sound/explosion.wav"));
@@ -313,7 +326,7 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
             clip.open(audioIn);
             final FloatControl gainControl =
                     (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            gainControl.setValue(volume);
+            gainControl.setValue(EXPLOSION_VOLUME);
             clip.start();
         } catch (final UnsupportedAudioFileException | IOException
                        | LineUnavailableException ignored) {
