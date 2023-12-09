@@ -7,7 +7,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import model.BoardInterface;
 
 /**
  * TetrisMenuBar Class.
@@ -41,7 +40,7 @@ public class TetrisMenuBar extends JMenuBar implements PropertyChangeMethods {
 
         final JMenuItem newGameItem = new JMenuItem("New Game");
         newGameItem.addActionListener(theE -> myPcs.firePropertyChange(
-                BoardInterface.GAME_STARTING, null, true));
+                GAME_STARTING, null, true));
         menu.add(newGameItem);
 
         final JMenuItem exitItem = new JMenuItem("Exit");

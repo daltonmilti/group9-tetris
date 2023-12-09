@@ -8,7 +8,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import javax.swing.JPanel;
-import model.BoardInterface;
 import model.Point;
 import model.TetrisPiece;
 
@@ -31,9 +30,6 @@ public final class NextPiecePanel extends JPanel implements PropertyChangeListen
      * A set size for the width of a block.
      */
     private static final int TETRIS_PIECE_HEIGHT = 5;
-
-    /** Used for debugging to ensure no extra panels are instantiated. */
-    private static int cnt;
 
     /**
      * Keeping the T piece in the middle.
@@ -59,10 +55,6 @@ public final class NextPiecePanel extends JPanel implements PropertyChangeListen
      */
     public NextPiecePanel() {
         super();
-        if (cnt > 0) {
-            throw new IllegalStateException();
-        }
-        cnt++;
         this.setPreferredSize(
              new Dimension(TetrisGUI.SIZE / 2, TetrisGUI.SIZE / 2));
         this.setBackground(Color.BLACK);
@@ -114,7 +106,7 @@ public final class NextPiecePanel extends JPanel implements PropertyChangeListen
     }
     @Override
     public void propertyChange(final PropertyChangeEvent theEvent) {
-        if (BoardInterface.NEXT_PIECE_CHANGE.equals(theEvent.getPropertyName())) {
+        if (PropertyChangeMethods.NEXT_PIECE_CHANGE.equals(theEvent.getPropertyName())) {
             myNextPiece = (TetrisPiece) theEvent.getNewValue();
             repaint();
         }

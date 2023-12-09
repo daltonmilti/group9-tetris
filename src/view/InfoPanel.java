@@ -8,7 +8,6 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import model.BoardInterface;
 
 /**
  * Creates the info for the Tetris GUI.
@@ -134,7 +133,7 @@ public final class InfoPanel extends JPanel implements PropertyChangeListener {
         myLevel = (myClearedRows / ROWS_TO_PROGRESS) + 1;
         if (myLevel != myPastLevel) {
             myPastLevel = myLevel;
-            myPcs.firePropertyChange(BoardInterface.LEVEL_CHANGING, null, myLevel);
+            myPcs.firePropertyChange(PropertyChangeMethods.LEVEL_CHANGING, null, myLevel);
         }
         myScore += calculateScore(theRowsCleared);
         myScoreText.setText(SCORE_LABEL + myScore);
@@ -154,7 +153,7 @@ public final class InfoPanel extends JPanel implements PropertyChangeListener {
 
     @Override
     public void propertyChange(final PropertyChangeEvent theEvt) {
-        if (BoardInterface.ROW_CHANGE.equals(theEvt.getPropertyName())) {
+        if (PropertyChangeMethods.ROW_CHANGE.equals(theEvt.getPropertyName())) {
             display((int) theEvt.getNewValue());
         }
     }
