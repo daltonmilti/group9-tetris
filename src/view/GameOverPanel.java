@@ -13,54 +13,27 @@ import model.BoardInterface;
 
 
 
-public class GameOverPanel extends JPanel implements ActionListener {
+public class GameOverPanel extends JPanel {
 
-    private final Dimension mySize = new Dimension(200, 200);
-    private JButton myNewGameButt;
-    private JButton myTitleScreenButt;
-    private JButton myExitButt;
-    private JButton myAreYouSure1;
-    private JButton myAreYouSure2;
-    private JButton myAreYouSure3;
-    private PropertyChangeSupport myPcs;
+    private final Dimension mySize = new Dimension(300, 200);
 
 
     public GameOverPanel() {
         setVisible(false);
         setSize(mySize);
-        setLocation(0, 300);
+        setLocation(150, 500);
 
         buildComponents();
         layoutComponents();
-        myPcs = new PropertyChangeSupport(this);
-
         revalidate();
     }
 
     private void layoutComponents() {
-        add(myNewGameButt);
-        add(myTitleScreenButt);
-        add(myExitButt);
+
     }
 
     private void buildComponents() {
-        myNewGameButt = new JButton("New Game");
-        myTitleScreenButt = new JButton("Back to Title Screen");
-        myExitButt = new JButton("Exit Game");
-        myAreYouSure1 = new JButton("Are you sure you want to leave?");
-        myAreYouSure2 = new JButton("Are you SURE you're sure?");
-        myAreYouSure3 = new JButton("Our game is REALLLLY awesome tho :(");
+
     }
 
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        myNewGameButt.addActionListener(theE -> myPcs.firePropertyChange(
-                BoardInterface.GAME_STARTING, null, true));
-    }
-
-    public void addPropertyChangeListener(final String thePropertyName,
-                                          final PropertyChangeListener theListener) {
-        myPcs.addPropertyChangeListener(thePropertyName, theListener);
-    }
 }
