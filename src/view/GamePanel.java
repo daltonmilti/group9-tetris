@@ -108,15 +108,26 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
             g2d.setPaint(Color.WHITE);
             g2d.drawString("PAUSED", PAUSED_POINT.x(), PAUSED_POINT.y());
         }
+        paintGameOver(g2d);
+    }
+
+    /**
+     * Paints game over screen.
+     */
+    private void paintGameOver(final Graphics2D theG) {
         if (myGameOver) {
             //background
-            g2d.setPaint(Color.WHITE); // this is just to see it's in the right place
-            g2d.fillRect(0, 350, 400, 100);
+            theG.setPaint(Color.WHITE);
+            final int gameOverX = 0;
+            final int gameOverY = 350;
+            final int gameOverWidth = 400;
+            final int gameOverHeight = 100;
+            theG.fillRect(gameOverX, gameOverY, gameOverWidth, gameOverHeight);
 
             //font
-            g2d.setFont(new Font(TEXT_ROMAN, Font.PLAIN, GAME_OVER_FONT_SIZE));
-            g2d.setPaint(Color.RED);
-            g2d.drawString("GAME OVER", PAUSED_POINT.x(), PAUSED_POINT.y());
+            theG.setFont(new Font(TEXT_ROMAN, Font.PLAIN, GAME_OVER_FONT_SIZE));
+            theG.setPaint(Color.RED);
+            theG.drawString("GAME OVER", PAUSED_POINT.x(), PAUSED_POINT.y());
         }
     }
 
