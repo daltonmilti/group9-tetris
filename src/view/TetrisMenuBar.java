@@ -48,6 +48,15 @@ public class TetrisMenuBar extends JMenuBar implements PropertyChangeMethods {
         exitItem.addActionListener(theE -> System.exit(0));
         menu.add(exitItem);
 
+        final JMenu about = getjMenu();
+
+        menuBar.add(menu);
+        menuBar.add(about);
+
+        return menuBar;
+    }
+
+    private JMenu getjMenu() {
         final JMenu about = new JMenu("About");
         final JMenuItem aboutItem = new JMenuItem("Group Members");
         aboutItem.addActionListener(theE -> JOptionPane.
@@ -58,6 +67,12 @@ public class TetrisMenuBar extends JMenuBar implements PropertyChangeMethods {
                         Dalton Miltimore
                         Khobaib Zafar"""));
         about.add(aboutItem);
+        final JMenuItem scoringItem = getjMenuItem();
+        about.add(scoringItem);
+        return about;
+    }
+
+    private JMenuItem getjMenuItem() {
         final JMenuItem scoringItem = new JMenuItem("Scoring Rules");
         scoringItem.addActionListener(theE -> JOptionPane.
                 showMessageDialog(this, """
@@ -68,13 +83,9 @@ public class TetrisMenuBar extends JMenuBar implements PropertyChangeMethods {
                         1 line      2 line      3 line       4 line
                         n * 40    n * 100    n * 300    n * 1200
                         """));
-        about.add(scoringItem);
-
-        menuBar.add(menu);
-        menuBar.add(about);
-
-        return menuBar;
+        return scoringItem;
     }
+
     @Override
     public void addPropertyChangeListener(final PropertyChangeListener theListener) {
         myPcs.addPropertyChangeListener(theListener);

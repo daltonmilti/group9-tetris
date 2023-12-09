@@ -54,4 +54,12 @@ public final class TetrisPieceColors {
     public static Color getColor(final TetrisPiece thePiece) {
         return getColor(thePiece.getBlock());
     }
+
+    /**
+     * Grabs a random Tetris color.
+     * @return A color of random value.
+     */
+    public static Color random() {
+        return getColor(TetrisPiece.getRandomPiece());
+    }
 }
