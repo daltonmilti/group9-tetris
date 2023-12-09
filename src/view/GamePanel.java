@@ -106,7 +106,7 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
         }
         if (myGameOver) {
             //background
-            g2d.setPaint(Color.WHITE);
+            g2d.setPaint(Color.WHITE); // this is just to see it's in the right place
             g2d.fillRect(0, 350, 400, 100);
 
             //font
