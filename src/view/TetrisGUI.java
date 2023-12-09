@@ -10,7 +10,6 @@ import java.beans.PropertyChangeSupport;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.Objects;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -32,7 +31,7 @@ import model.BoardInterface;
  * @author chriseetwo
  * @version Autumn 2023
  */
-public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMethods{
+public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMethods {
 
     /**
      * The main board used for the Tetris project.
@@ -51,7 +50,7 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
     private static final Timer TIMER = new Timer(BASE_SPEED, theE -> BOARD.step());
 
     /** PropertyChangeSupport for all listeners */
-    private PropertyChangeSupport myPcs;
+    private final PropertyChangeSupport myPcs;
 
     /** The Tetris Frame. */
     private JFrame myWindow;
@@ -190,22 +189,22 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
         if (myGamePause) {
             TIMER.stop();
             myClip.stop();
-            myPcs.firePropertyChange(BoardInterface.GAME_PAUSED, !myGamePause, myGamePause);
+            myPcs.firePropertyChange(GAME_PAUSED, !myGamePause, myGamePause);
         } else {
             TIMER.start();
             myClip.start();
-            myPcs.firePropertyChange(BoardInterface.GAME_PAUSED, !myGamePause, myGamePause);
+            myPcs.firePropertyChange(GAME_PAUSED, !myGamePause, myGamePause);
         }
     }
 
     @Override
     public void propertyChange(final PropertyChangeEvent theEvt) {
-        if (BoardInterface.GAME_STARTING.equals(theEvt.getPropertyName()) && !myGameStarted) {
+        if (GAME_STARTING.equals(theEvt.getPropertyName()) && !myGameStarted) {
             gameStart();
-        } else if (BoardInterface.GAME_END.equals(theEvt.getPropertyName())) {
+        } else if (GAME_END.equals(theEvt.getPropertyName())) {
             myClip.close();
             myGameStarted = false;
-        } else if (BoardInterface.LEVEL_CHANGING.equals(theEvt.getPropertyName())) {
+        } else if (LEVEL_CHANGING.equals(theEvt.getPropertyName())) {
             TIMER.setDelay((int) (BASE_SPEED / Math.log((int) theEvt.getNewValue() + 1)));
         }
     }
@@ -261,8 +260,8 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
             super();
             myKeys.put(KeyEvent.VK_UP, BOARD::rotateCW);
             myKeys.put(KeyEvent.VK_W, BOARD::rotateCW);
-            myKeys.put(KeyEvent.VK_DOWN, BOARD::down);
-            myKeys.put(KeyEvent.VK_S, BOARD::down);
+            myKeys.put(KeyEvent.VK_DOWN, this::down);
+            myKeys.put(KeyEvent.VK_S, this::down);
             myKeys.put(KeyEvent.VK_LEFT, BOARD::left);
             myKeys.put(KeyEvent.VK_A, BOARD::left);
             myKeys.put(KeyEvent.VK_RIGHT, BOARD::right);
@@ -271,9 +270,16 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
             myKeys.put(KeyEvent.VK_P, TetrisGUI.this::pause);
         }
 
+        private void down() {
+            BOARD.down();
+            TIMER.restart();
+        }
+
         @Override
         public void keyPressed(final KeyEvent theE) {
-            if (TetrisGUI.this.myGameStarted && (!TetrisGUI.this.myGamePause || theE.getKeyCode() == KeyEvent.VK_P) && myKeys.containsKey(theE.getKeyCode())) {
+            if (TetrisGUI.this.myGameStarted
+                && (!TetrisGUI.this.myGamePause || theE.getKeyCode() == KeyEvent.VK_P)
+                && myKeys.containsKey(theE.getKeyCode())) {
                 myKeys.get(theE.getKeyCode()).run();
             }
         }

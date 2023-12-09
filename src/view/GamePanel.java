@@ -5,13 +5,13 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.LinkedList;
 import java.util.List;
 import javax.swing.JPanel;
 import model.Block;
-import model.BoardInterface;
 import model.MovableTetrisPiece;
 import model.Point;
 
@@ -31,24 +31,14 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
     public static final int SQUARE_SIZE = 40;
 
     /**
-     * A different color red to distinguish the S block from the background.
+     * Point on the screen of the PAUSED logo.
      */
-    public static final Color OTHER_RED = new Color(80, 0, 0);
+    private static final Point PAUSED_POINT = new Point(55, 415);
 
     /**
-     * The stroke width in pixels.
+     * PAUSED logo font size.
      */
-    private static final int STROKE_WIDTH = 2;
-
-    /**
-     * The width for the rectangle.
-     */
-    private static final int RECTANGLE_WIDTH = 50;
-
-    /**
-     * The height for the rectangle.
-     */
-    private static final int RECTANGLE_HEIGHT = 50;
+    private static final int PAUSED_FONT_SIZE = 70;
 
     /**
      * The current piece.
@@ -84,33 +74,11 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
     protected void paintComponent(final Graphics theG) {
         super.paintComponent(theG);
         final Graphics2D g2d = (Graphics2D) theG;
-
-        if (myGhostPiece != null) {
-            final Point[] p = myGhostPiece.getBoardPoints();
-            for (final Point k : p) {
-                g2d.setPaint(Color.BLACK);
-                g2d.fillRect(k.x() * GamePanel.SQUARE_SIZE,
-                        (this.getHeight() - SQUARE_SIZE) - k.y() * GamePanel.SQUARE_SIZE,
-                        GamePanel.SQUARE_SIZE + 1, GamePanel.SQUARE_SIZE + 1);
-                g2d.setPaint(Color.LIGHT_GRAY);
-                g2d.fillRect(k.x() * GamePanel.SQUARE_SIZE + 1,
-                        (this.getHeight() - SQUARE_SIZE) - k.y() * GamePanel.SQUARE_SIZE + 1,
-                        GamePanel.SQUARE_SIZE - 1, GamePanel.SQUARE_SIZE - 1);
-            }
-        }
-
-        if (myCurrentPiece != null) {
-            final Point[] i = myCurrentPiece.getBoardPoints();
-            for (final Point k : i) {
-                g2d.setPaint(Color.BLACK);
-                g2d.fillRect(k.x() * GamePanel.SQUARE_SIZE,
-                        (this.getHeight() - SQUARE_SIZE) - k.y() * GamePanel.SQUARE_SIZE,
-                        GamePanel.SQUARE_SIZE + 1, GamePanel.SQUARE_SIZE + 1);
-                g2d.setPaint(TetrisPieceColors.getColor(myCurrentPiece));
-                g2d.fillRect(k.x() * GamePanel.SQUARE_SIZE + 1,
-                        (this.getHeight() - SQUARE_SIZE) - k.y() * GamePanel.SQUARE_SIZE + 1,
-                        GamePanel.SQUARE_SIZE - 1, GamePanel.SQUARE_SIZE - 1);
-            }
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                             RenderingHints.VALUE_ANTIALIAS_ON);
+        if (myGhostPiece != null && myCurrentPiece != null) {
+            paintPiece(g2d, myGhostPiece, Color.GRAY);
+            paintPiece(g2d, myCurrentPiece, TetrisPieceColors.getColor(myCurrentPiece));
         }
         if (myFrozenBlocks != null) {
             for (int i = 0; i < myFrozenBlocks.size(); i++) {
@@ -121,37 +89,26 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
         }
         if (myGamePaused) {
             g2d.setPaint(Color.BLACK);
-            g2d.setFont(new Font("TimesRoman", Font.ROMAN_BASELINE, 70));
+            g2d.setFont(new Font("Times New Roman", Font.PLAIN, PAUSED_FONT_SIZE));
             g2d.setPaint(Color.WHITE);
-            g2d.drawString("PAUSED", 55, 415);
+            g2d.drawString("PAUSED", PAUSED_POINT.x(), PAUSED_POINT.y());
 
         }
     }
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public void propertyChange(final PropertyChangeEvent theEvent) {
-        if (BoardInterface.CURRENT_PIECE_CHANGING.equals(theEvent.getPropertyName())) {
-            myCurrentPiece = (MovableTetrisPiece) theEvent.getNewValue();
-            repaint();
-        } else if (BoardInterface.FROZEN_CHANGING.equals(theEvent.getPropertyName())) {
-            myFrozenBlocks = (LinkedList<Block[]>) theEvent.getNewValue();
-            if (myGhostPiece != null) {
-                final Point[] p = myGhostPiece.getBoardPoints();
-                for (final Point k : p) {
-                    if (myFrozenBlocks.get(k.y())[k.x()] == null) {
-                        myGhostPiece = null;
-                        break;
-                    }
-                }
-            }
-            repaint();
-        } else if (BoardInterface.GAME_PAUSED.equals(theEvent.getPropertyName())) {
-            myGamePaused = (boolean) theEvent.getNewValue();
-            repaint();
-        } else if (BoardInterface.GHOST_PIECE_CHANGING.equals(theEvent.getPropertyName())) {
-            myGhostPiece = (MovableTetrisPiece) theEvent.getNewValue();
-            repaint();
+    private void paintPiece(final Graphics2D theG2D,
+                            final MovableTetrisPiece thePiece,
+                            final Color theColor) {
+        final Point[] p = thePiece.getBoardPoints();
+        for (final Point k : p) {
+            theG2D.setPaint(Color.BLACK);
+            theG2D.fillRect(k.x() * GamePanel.SQUARE_SIZE,
+                    (this.getHeight() - SQUARE_SIZE) - k.y() * GamePanel.SQUARE_SIZE,
+                    GamePanel.SQUARE_SIZE + 1, GamePanel.SQUARE_SIZE + 1);
+            theG2D.setPaint(theColor);
+            theG2D.fillRect(k.x() * GamePanel.SQUARE_SIZE + 1,
+                    (this.getHeight() - SQUARE_SIZE) - k.y() * GamePanel.SQUARE_SIZE + 1,
+                    GamePanel.SQUARE_SIZE - 1, GamePanel.SQUARE_SIZE - 1);
         }
     }
 
@@ -168,7 +125,33 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
                     GamePanel.SQUARE_SIZE - 1, GamePanel.SQUARE_SIZE - 1);
 
         }
-
     }
 
+    @Override
+    @SuppressWarnings("unchecked")
+    public void propertyChange(final PropertyChangeEvent theEvent) {
+        if (PropertyChangeMethods.CURRENT_PIECE_CHANGING.equals(theEvent.getPropertyName())) {
+            myCurrentPiece = (MovableTetrisPiece) theEvent.getNewValue();
+            repaint();
+        } else if (PropertyChangeMethods.FROZEN_CHANGING.equals(theEvent.getPropertyName())) {
+            myFrozenBlocks = (LinkedList<Block[]>) theEvent.getNewValue();
+            if (myGhostPiece != null) {
+                final Point[] p = myGhostPiece.getBoardPoints();
+                for (final Point k : p) {
+                    if (myFrozenBlocks.get(k.y())[k.x()] == null) {
+                        myGhostPiece = null;
+                        break;
+                    }
+                }
+            }
+            repaint();
+        } else if (PropertyChangeMethods.GAME_PAUSED.equals(theEvent.getPropertyName())) {
+            myGamePaused = (boolean) theEvent.getNewValue();
+            repaint();
+        } else if (PropertyChangeMethods.GHOST_PIECE_CHANGING.
+                   equals(theEvent.getPropertyName())) {
+            myGhostPiece = (MovableTetrisPiece) theEvent.getNewValue();
+            repaint();
+        }
+    }
 }
