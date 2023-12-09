@@ -11,11 +11,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Random;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.sound.sampled.*;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
@@ -221,9 +217,9 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
         final int randomInt = r.nextInt(2);
 
         if (randomInt == 0) {
-            filePath = "/game_over.wav";
+            filePath = "/assets/sound/game_over.wav";
         } else {
-            filePath = "/charles_bad_1.wav";
+            filePath = "/assets/sound/charles_bad_1.wav";
         }
 
         try {
@@ -244,16 +240,14 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
     private void playLevelUp() {
         final Random r = new Random();
         String filePath = "";
-        final int randomInt = r.nextInt(4);
+        final int randomInt = r.nextInt(3);
 
         if (randomInt == 0) {
-            filePath = "/newlevel.wav";
+            filePath = "/assets/sound/charles_yes_1.wav";
         } else if (randomInt == 1) {
-            filePath = "/charles_yes_1.wav";
-        } else if (randomInt == 2) {
-            filePath = "/charles_yes_2.wav";
+            filePath = "/assets/sound/charles_yes_2.wav";
         } else {
-            filePath = "/charles_yes_3.wav";
+            filePath = "/assets/sound/charles_yes_3.wav";
         }
 
         try {
@@ -277,8 +271,32 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
             final AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
             myClip = AudioSystem.getClip();
             myClip.open(audioIn);
+
+            // Get the gain control
+            final FloatControl gainControl =
+                    (FloatControl) myClip.getControl(FloatControl.Type.MASTER_GAIN);
+
+            // Reduce volume by a number of decibels (e.g., -10.0f)
+            final float volume = -10.0f; // Value in decibels
+
+            gainControl.setValue(volume);
+
             myClip.start();
             myClip.loop(Clip.LOOP_CONTINUOUSLY); // Loop the music continuously.
+        } catch (final UnsupportedAudioFileException | IOException
+                       | LineUnavailableException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void drop() {
+        BOARD.drop();
+        try {
+            final URL url = this.getClass().getResource("/assets/sound/explosion.wav");
+            final AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
+            myClip = AudioSystem.getClip();
+            myClip.open(audioIn);
+            myClip.start();
         } catch (final UnsupportedAudioFileException | IOException
                        | LineUnavailableException e) {
             e.printStackTrace();
@@ -325,7 +343,7 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
             myKeys.put(KeyEvent.VK_A, BOARD::left);
             myKeys.put(KeyEvent.VK_RIGHT, BOARD::right);
             myKeys.put(KeyEvent.VK_D, BOARD::right);
-            myKeys.put(KeyEvent.VK_SPACE, BOARD::drop);
+            myKeys.put(KeyEvent.VK_SPACE, TetrisGUI.this::drop);
             myKeys.put(KeyEvent.VK_P, TetrisGUI.this::pause);
         }
 
