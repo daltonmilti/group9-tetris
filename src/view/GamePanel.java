@@ -155,15 +155,6 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
             repaint();
         } else if (PropertyChangeMethods.FROZEN_CHANGING.equals(theEvent.getPropertyName())) {
             myFrozenBlocks = (LinkedList<Block[]>) theEvent.getNewValue();
-            if (myGhostPiece != null) {
-                final Point[] p = myGhostPiece.getBoardPoints();
-                for (final Point k : p) {
-                    if (myFrozenBlocks.get(k.y())[k.x()] == null) {
-                        myGhostPiece = null;
-                        break;
-                    }
-                }
-            }
             repaint();
         } else if (PropertyChangeMethods.GAME_PAUSED.equals(theEvent.getPropertyName())) {
             myGamePaused = (boolean) theEvent.getNewValue();
