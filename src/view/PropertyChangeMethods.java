@@ -40,6 +40,12 @@ public interface PropertyChangeMethods {
     /** Used to notify listeners the game is paused. */
     String GAME_PAUSED = "The game is paused";
 
+    /** Used to notify listeners that Hard Mode is changing. */
+    String HARD_MODE = "Hard mode is chaning";
+
+    /** Used to notify listeners that Game Speed is changing. */
+    String SPEED_CHANGING = "Game speed is changing";
+
 
     /**
      * Used for adding a PropertyChangeListener. This listener is registered to all properties.

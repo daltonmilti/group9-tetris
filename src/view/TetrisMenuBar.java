@@ -1,11 +1,15 @@
 package view;
 
+
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JSlider;
 
 /**
  * TetrisMenuBar Class.
@@ -16,6 +20,11 @@ import javax.swing.JOptionPane;
  * @version Autumn 2023
  */
 public class TetrisMenuBar extends JMenuBar implements PropertyChangeMethods {
+
+    /**
+     * Tick Spacing for Slider
+     */
+    private static final int TICK_SPACING = 50;
 
     /** PropertyChangeSupport for all listeners */
     private PropertyChangeSupport myPcs;
@@ -38,7 +47,7 @@ public class TetrisMenuBar extends JMenuBar implements PropertyChangeMethods {
         final JMenu menu = new JMenu("File");
 
         final JMenuItem newGameItem = new JMenuItem("New Game");
-        newGameItem.addActionListener(theE -> myPcs.firePropertyChange(
+        newGameItem.addActionListener(theEvent -> myPcs.firePropertyChange(
                 GAME_STARTING, null, true));
         menu.add(newGameItem);
 
@@ -48,6 +57,9 @@ public class TetrisMenuBar extends JMenuBar implements PropertyChangeMethods {
 
         final JMenu about = getjMenu();
 
+        final JMenu options = getGameOptions();
+
+        menuBar.add(options);
         menuBar.add(menu);
         menuBar.add(about);
 
@@ -68,6 +80,28 @@ public class TetrisMenuBar extends JMenuBar implements PropertyChangeMethods {
         final JMenuItem scoringItem = getjMenuItem();
         about.add(scoringItem);
         return about;
+    }
+
+    private JMenu getGameOptions() {
+        final JMenu options = new JMenu("Options");
+
+        final JCheckBoxMenuItem hardMode = new JCheckBoxMenuItem("Hard Mode");
+        hardMode.addActionListener(theE ->
+                myPcs.firePropertyChange(HARD_MODE, null, hardMode.isSelected()));
+        options.add(hardMode);
+
+        final JLabel sliderName = new JLabel("Game Speed");
+        options.add(sliderName);
+
+        final JSlider slider = new JSlider(50, 200, 50);
+        slider.addChangeListener(theE ->
+                myPcs.firePropertyChange(SPEED_CHANGING, null, slider.getValue()));
+        slider.setMajorTickSpacing(TICK_SPACING);
+        slider.setSnapToTicks(true);
+
+
+        options.add(slider);
+        return options;
     }
 
     private JMenuItem getjMenuItem() {
@@ -105,4 +139,6 @@ public class TetrisMenuBar extends JMenuBar implements PropertyChangeMethods {
                                              final PropertyChangeListener theListener) {
         myPcs.removePropertyChangeListener(thePropertyName, theListener);
     }
+
+
 }

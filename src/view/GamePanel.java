@@ -8,6 +8,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import javax.swing.JPanel;
@@ -56,6 +57,36 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
     private static final int[] GAME_OVER_SPECS = {350, 400, 100};
 
     /**
+     * Color Green for Border
+     */
+    private static final Color GREEN_BORDER = new Color(57, 255, 20);
+
+    /**
+     * Color Red for Border
+     */
+    private static final Color RED_BORDER = new Color(255, 20, 57);
+
+    /**
+     * Color Blue for Border
+     */
+    private static final Color BLUE_BORDER = new Color(20, 57, 255);
+
+    /**
+     * Number of Rows
+     */
+    private static final int ROWS = 20;
+
+    /**
+     * Number of Columns
+     */
+    private static final int COLUMNS = 10;
+
+    /**
+     * Screen Size
+     */
+    private static final int SIZE = 800;
+
+    /**
      * The current piece.
      */
     private MovableTetrisPiece myCurrentPiece;
@@ -76,6 +107,11 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
     private boolean myGamePaused;
 
     /**
+     * Indicator for Hard Mode
+     */
+    private boolean myHardMode;
+
+    /**
      * Whether or not the game is over.
      */
     private boolean myGameOver;
@@ -87,7 +123,6 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
         super();
         this.setPreferredSize(new Dimension(TetrisGUI.SIZE / 2, TetrisGUI.SIZE));
         this.setBackground(Color.BLACK);
-
     }
 
     @Override
@@ -96,11 +131,13 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
         final Graphics2D g2d = (Graphics2D) theG;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                              RenderingHints.VALUE_ANTIALIAS_ON);
+        paintGrid(g2d);
         if (myGhostPiece != null && myCurrentPiece != null) {
             paintPiece(g2d, myGhostPiece, Color.GRAY);
             paintPiece(g2d, myCurrentPiece, TetrisPieceColors.getColor(myCurrentPiece));
+
         }
-        if (myFrozenBlocks != null) {
+        if (myFrozenBlocks != null && !myHardMode) {
             for (int i = 0; i < myFrozenBlocks.size(); i++) {
                 for (int k = 0; k < myFrozenBlocks.get(0).length; k++) {
                     paintBlock(myFrozenBlocks.get(i)[k], g2d, i, k);
@@ -113,6 +150,7 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
         if (myGameOver) {
             paintGameOver(g2d);
         }
+
     }
 
     private void paintGameOver(final Graphics2D theG2D) {
@@ -149,6 +187,18 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
         }
     }
 
+    private void paintGrid(final Graphics2D theG2D) {
+        final ArrayList<Point> p = new ArrayList<>();
+        for (int x = 0; x < COLUMNS; x++) {
+            theG2D.setPaint(TetrisPieceColors.random());
+            theG2D.drawLine(x * SQUARE_SIZE, SIZE, x * SQUARE_SIZE, 0);
+        }
+        for (int y = 0; y < ROWS; y++) {
+            theG2D.setPaint(TetrisPieceColors.random());
+            theG2D.drawLine(0, y * SQUARE_SIZE, SIZE / 2, y * SQUARE_SIZE);
+        }
+    }
+
     private void paintBlock(final Block theBlock, final Graphics2D theG2d,
                             final int theX, final int theY) {
         if (theBlock != null) {
@@ -182,6 +232,9 @@ public final class GamePanel extends JPanel implements PropertyChangeListener {
             repaint();
         } else if (PropertyChangeMethods.GAME_END.equals(theEvent.getPropertyName())) {
             myGameOver = (boolean) theEvent.getNewValue();
+            repaint();
+        } else if (PropertyChangeMethods.HARD_MODE.equals(theEvent.getPropertyName())) {
+            myHardMode = (boolean) theEvent.getNewValue();
             repaint();
         }
     }

@@ -74,6 +74,21 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
     /** Used to update step() the board after some time. */
     private static final Timer TIMER = new Timer(BASE_SPEED, theE -> BOARD.step());
 
+    /**
+     * Represents constant used for Speed Slider
+     */
+    private static final int SLIDER_CONSTANT = 50;
+
+    /**
+     * Represents constant used for Timer Speed
+     */
+    private static final int SPEED_CONSTANT = 1000;
+
+    /**
+     * Represents constant used for One Half Timer Speed
+     */
+    private static final int ONE_HALF_CONSTSNT = 750;
+
     /** PropertyChangeSupport for all listeners */
     private final PropertyChangeSupport myPcs;
 
@@ -121,6 +136,11 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
     private boolean myGamePause;
 
     /**
+     * The current Base Speed of Timer
+     */
+    private int mySpeed;
+
+    /**
      * The Clip used to play music.
      */
     private Clip myClip;
@@ -132,6 +152,7 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
         buildComponents();
         layoutComponents();
         addListenersAndPropertyChangeListeners();
+        mySpeed = BASE_SPEED;
     }
 
     /**
@@ -227,13 +248,15 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
         if (GAME_STARTING.equals(theEvt.getPropertyName()) && !myGameStarted) {
             gameStart();
         } else if (GAME_END.equals(theEvt.getPropertyName())
-                   && (boolean) theEvt.getNewValue()) {
+                   && (boolean) theEvt.getNewValue() && myGameStarted) {
             myClip.close();
             myGameStarted = false;
             playGameOver();
         } else if (LEVEL_CHANGING.equals(theEvt.getPropertyName())) {
-            TIMER.setDelay((int) (BASE_SPEED / Math.log((int) theEvt.getNewValue() + 1)));
+            TIMER.setDelay((int) (mySpeed / Math.log((int) theEvt.getNewValue() + 1)));
             playLevelUp();
+        } else if (SPEED_CHANGING.equals(theEvt.getPropertyName()) && !myGameStarted) {
+            changeSpeed((int) theEvt.getNewValue());
         }
     }
 
@@ -330,6 +353,30 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
         } catch (final UnsupportedAudioFileException | IOException
                        | LineUnavailableException ignored) {
         }
+    }
+
+    private void changeSpeed(final int theSpeed) {
+        switch (theSpeed) {
+            case SLIDER_CONSTANT:
+                mySpeed = SPEED_CONSTANT * 2;
+                TIMER.setDelay(mySpeed);
+                break;
+            case SLIDER_CONSTANT * 2:
+                mySpeed = SPEED_CONSTANT;
+                TIMER.setDelay(mySpeed);
+                break;
+            case SLIDER_CONSTANT + SLIDER_CONSTANT * 2:
+                mySpeed = ONE_HALF_CONSTSNT;
+                TIMER.setDelay(mySpeed);
+                break;
+            case SLIDER_CONSTANT * 2 + SLIDER_CONSTANT * 2:
+                mySpeed = SPEED_CONSTANT / 2;
+                TIMER.setDelay(mySpeed);
+                break;
+            default:
+                mySpeed = BASE_SPEED;
+        }
+
     }
 
     @Override
