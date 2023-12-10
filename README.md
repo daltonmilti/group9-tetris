@@ -11,4 +11,4 @@
 [Google Docs Meeting Minutes](https://docs.google.com/document/d/1Gtdj8quBbRTpbuXDzKGhPMjTZWuvtRnsdNzf95d8Cf4/edit#heading=h.pg670c9zsoh2)
 
 ### Comments:
-#### - implemented ghost piece in the board class to help predicate where the current piece will land and notifies listeners when ghost piece changes.
+#### - implemented ghost piece in the board class to help predict where the current piece will land and notifies listeners when ghost piece changes.
