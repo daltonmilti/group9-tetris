@@ -8,4 +8,4 @@
 #### - Khobaib Zafar : Overall design. 
 #### - Dalton Miltimore : GamePanel, music, sfx, game over.
 
-[Google Docs Meeting Minutes](https://docs.google.com/document/d/1lL27XkiIrwfo9goU0bscvt742bIxOrm6vovCeK0SL-c/edit)
+[Google Docs Meeting Minutes](https://docs.google.com/document/d/1Gtdj8quBbRTpbuXDzKGhPMjTZWuvtRnsdNzf95d8Cf4/edit#heading=h.pg670c9zsoh2)
