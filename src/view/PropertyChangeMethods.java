@@ -46,6 +46,9 @@ public interface PropertyChangeMethods {
     /** Used to notify listeners that Game Speed is changing. */
     String SPEED_CHANGING = "Game speed is changing";
 
+    /** Used to notify listeners that Game Speed is changing. */
+    String INFO_RESET = "Reset Info";
+
 
     /**
      * Used for adding a PropertyChangeListener. This listener is registered to all properties.

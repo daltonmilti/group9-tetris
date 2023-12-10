@@ -206,10 +206,20 @@ public final class InfoPanel extends JPanel implements PropertyChangeListener {
         };
     }
 
+    private void resetInfo() {
+        myScore = 0;
+        myLevel = 1;
+        myPastLevel = 1;
+        myClearedRows = 0;
+        display(0);
+    }
+
     @Override
     public void propertyChange(final PropertyChangeEvent theEvt) {
         if (PropertyChangeMethods.ROW_CHANGE.equals(theEvt.getPropertyName())) {
             display((int) theEvt.getNewValue());
+        } else if (PropertyChangeMethods.INFO_RESET.equals(theEvt.getPropertyName())) {
+            resetInfo();
         }
     }
 

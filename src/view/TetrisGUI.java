@@ -222,6 +222,7 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
         myInfoPanel.addPropertyChangeListener(this);
         myMenuBar.addPropertyChangeListener((PropertyChangeListener) myGamePanel);
         this.addPropertyChangeListener((PropertyChangeListener) myGamePanel);
+        this.addPropertyChangeListener((PropertyChangeListener) myInfoPanel);
 
     }
 
@@ -247,6 +248,7 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
     public void propertyChange(final PropertyChangeEvent theEvt) {
         if (GAME_STARTING.equals(theEvt.getPropertyName()) && !myGameStarted) {
             gameStart();
+            myPcs.firePropertyChange(INFO_RESET, null, true);
         } else if (GAME_END.equals(theEvt.getPropertyName())
                    && (boolean) theEvt.getNewValue() && myGameStarted) {
             myClip.close();
@@ -255,7 +257,7 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
         } else if (LEVEL_CHANGING.equals(theEvt.getPropertyName())) {
             TIMER.setDelay((int) (mySpeed / Math.log((int) theEvt.getNewValue() + 1)));
             playLevelUp();
-        } else if (SPEED_CHANGING.equals(theEvt.getPropertyName()) && !myGameStarted) {
+        } else if (SPEED_CHANGING.equals(theEvt.getPropertyName())) {
             changeSpeed((int) theEvt.getNewValue());
         }
     }
@@ -376,7 +378,6 @@ public final class TetrisGUI implements PropertyChangeListener, PropertyChangeMe
             default:
                 mySpeed = BASE_SPEED;
         }
-
     }
 
     @Override
