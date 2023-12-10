@@ -307,6 +307,7 @@ public class Board implements BoardInterface {
             }
             myDrop = false;
             down();  // move down one more time to freeze in place
+            updateGhostPiece();
         }
     }
     
