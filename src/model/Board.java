@@ -373,7 +373,7 @@ public class Board implements BoardInterface {
 
     /**
      * Adds a movable ghost piece to the board from the current falling tetris piece.
-     * Indicates where current piece falls will land.
+     * Indicates where the current falling piece will land.
      */
     private void updateGhostPiece() {
         MovableTetrisPiece ghost = myCurrentPiece;
