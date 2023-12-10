@@ -43,9 +43,13 @@ public class TetrisMenuBar extends JMenuBar implements PropertyChangeMethods {
                 GAME_STARTING, null, true));
         menu.add(newGameItem);
 
+        final JMenuItem endItem = new JMenuItem("End Game");
+        endItem.addActionListener(theE -> myPcs.firePropertyChange(GAME_END, null, true));
+        menu.add(endItem);
+
         final JMenuItem exitItem = new JMenuItem("Exit");
-        exitItem.setMnemonic(KeyEvent.VK_ESCAPE);
-        exitItem.addActionListener(theE -> myPcs.firePropertyChange(GAME_END, null, true));
+        exitItem.setMnemonic(KeyEvent.VK_X);
+        exitItem.addActionListener(theE -> System.exit(0));
         menu.add(exitItem);
 
         final JMenu about = getjMenu();
