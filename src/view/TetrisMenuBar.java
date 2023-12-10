@@ -1,6 +1,5 @@
 package view;
 
-import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import javax.swing.JMenu;
